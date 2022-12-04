@@ -1,13 +1,29 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'; /// Route
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import PageNotFound from './components/PageNotFound';
+/// import App from './App';
+import LoginPage from './components/LoginPage';
+import DefaultLayout from './components/DefaultLayout';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <DefaultLayout><LoginPage /></DefaultLayout>, /// <PageNotFound />,
+  },
+  {
+    path: '/login',
+    element: <DefaultLayout><PageNotFound /></DefaultLayout>,
+  },
+]);
+
+const root = ReactDOM.createRoot(document.getElementById('chat'));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>,
 );
 

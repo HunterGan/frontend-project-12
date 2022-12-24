@@ -1,82 +1,98 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import {
+  Container, Row, Col, Card, Form, FloatingLabel, Button,
+} from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-
-const validateFunc = ({ username, password }) => {
-  const schema = yup.object().shape({
-    username: yup.string().required(),
-    password: yup.string().required(),
-  });
-  return schema.validate({ username, password });
-};
+import routes from '../routes';
+import useAuth from '../hooks/index.jsx';
 
 const LoginPage = () => {
+  const [authFailed, setAuthFailed] = useState(false);
+  const auth = useAuth();
+  const inputRef = useRef();
+  const location = useLocation();
+  const navigate = useNavigate();
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
     },
+    validationSchema: yup.object().shape({
+      username: yup.string().required(),
+      password: yup.string().required(),
+    }),
     onSubmit: async (values) => {
+      setAuthFailed(false);
       try {
-        const loginData = await validateFunc(values);
-        console.log('LoginData: ', loginData);
-      } catch (e) {
-        console.log(e);
+        const res = await axios.post(routes.loginPath(), values);
+        console.log('response is: ', res);
+        localStorage.setItem('userId', JSON.stringify(res.data));
+        auth.logIn();
+        const { from } = location.state || { from: { pathname: '/' } };
+        navigate(from);
+      } catch (err) {
+        formik.setSubmitting(false);
+        if (err.isAxiosError && err.response.status === 401) {
+          setAuthFailed(true);
+          inputRef.current.select();
+          return;
+        }
+        throw err;
       }
     },
   });
   const result = (
-    <div className="container-fluid h-100">
-      <div className="row justify-content-center align-content-center h-100">
-        <div className="col-12 col-md-8 col-xxl-6">
-          <div className="card shadow-sm">
-            <div className="card-body row p-5">
-              <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
-                <img src="images/loginImage.jpeg" className="rounded-circle" alt="translateEnter" />
-              </div>
-              <form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={formik.handleSubmit}>
+    <Container fluid className="h-100">
+      <Row className="justify-content-center align-content-center h-100">
+        <Col xs={12} md={8} xxl={6}>
+          <Card className="shadow-sm">
+            <Card.Body className="row p-5">
+              <Col xs={12} md={6} className="d-flex align-items-center justify-content-center">
+                <Card.Img src="images/loginImage.jpeg" className="rounded-circle" alt="translateEnter" />
+              </Col>
+              <Form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={formik.handleSubmit}>
                 <h1 className="text-center mb-4">translate Войти</h1>
-                <div className="form-floating mb-3">
-                  <input
-                    id="username"
-                    name="username"
-                    className="form-control"
+                <FloatingLabel className="mb-3" label="username" controlId="username">
+                  <Form.Control
                     placeholder="translateYourNickname"
-                    autoComplete="username"
                     type="text"
                     onChange={formik.handleChange}
                     value={formik.values.username}
+                    isInvalid={authFailed}
+                    ref={inputRef}
+                    required
                   />
-                  {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                  <label htmlFor="username">translateВаш ник</label>
-                </div>
-                <div className="form-floating mb-4">
-                  <input
-                    id="password"
-                    name="password"
-                    className="form-control"
+                </FloatingLabel>
+                <FloatingLabel className="mb-4" label="password" controlId="password">
+                  <Form.Control
                     placeholder="translateПароль"
-                    autoComplete="current-password"
                     type="password"
                     onChange={formik.handleChange}
                     value={formik.values.password}
+                    isInvalid={authFailed}
+                    required
                   />
-                  {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                  <label htmlFor="password">translateПароль</label>
-                </div>
-                <button type="submit" className="w-100 mb-3 btn btn-outline-primary">Войти</button>
-              </form>
-            </div>
-            <div className="card-footer p-4">
+                  <Form.Control.Feedback type="invalid" tooltip>Please choose a username.</Form.Control.Feedback>
+                </FloatingLabel>
+                <Button variant="outline-primary" type="submit" className="w-100 mb-3">Войти</Button>
+              </Form>
+            </Card.Body>
+            <Card.Footer className="p-4">
               <div className="text-center">
                 <span>Нет аккаунта?</span>
                 <a href="/signup">Регистрация</a>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            </Card.Footer>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
   return result;
 };

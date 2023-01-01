@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Container, Row, Col, Card, Form, FloatingLabel, Button,
@@ -7,10 +7,9 @@ import {
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import routes from '../routes';
-import useAuth from '../hooks/index.jsx';
+import { useAuth } from '../hooks/index.js';
 
 const LoginPage = () => {
-  const [authFailed, setAuthFailed] = useState(false);
   const auth = useAuth();
   const inputRef = useRef();
   const location = useLocation();
@@ -28,10 +27,9 @@ const LoginPage = () => {
       password: yup.string().required(),
     }),
     onSubmit: async (values) => {
-      setAuthFailed(false);
       try {
         const res = await axios.post(routes.loginPath(), values);
-        console.log('response is: ', res);
+        /// console.log('response is: ', res);
         localStorage.setItem('userId', JSON.stringify(res.data));
         auth.logIn();
         const { from } = location.state || { from: { pathname: '/' } };
@@ -39,7 +37,6 @@ const LoginPage = () => {
       } catch (err) {
         formik.setSubmitting(false);
         if (err.isAxiosError && err.response.status === 401) {
-          setAuthFailed(true);
           inputRef.current.select();
           return;
         }
@@ -48,9 +45,9 @@ const LoginPage = () => {
     },
   });
   const result = (
-    <Container fluid className="h-100">
+    <Container fluid className="h-100 my-4">
       <Row className="justify-content-center align-content-center h-100">
-        <Col xs={12} md={8} xxl={6}>
+        <Col xxl={6} md={8} xs={12}>
           <Card className="shadow-sm">
             <Card.Body className="row p-5">
               <Col xs={12} md={6} className="d-flex align-items-center justify-content-center">
@@ -64,7 +61,7 @@ const LoginPage = () => {
                     type="text"
                     onChange={formik.handleChange}
                     value={formik.values.username}
-                    isInvalid={authFailed}
+                    isInvalid={auth.loggedIn}
                     ref={inputRef}
                     required
                   />
@@ -75,7 +72,7 @@ const LoginPage = () => {
                     type="password"
                     onChange={formik.handleChange}
                     value={formik.values.password}
-                    isInvalid={authFailed}
+                    isInvalid={auth.loggedIn}
                     required
                   />
                   <Form.Control.Feedback type="invalid" tooltip>Please choose a username.</Form.Control.Feedback>

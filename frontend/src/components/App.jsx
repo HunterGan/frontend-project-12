@@ -1,18 +1,29 @@
 import React, { useState } from 'react';
 import {
-  BrowserRouter as Router, Routes, Route, useLocation, Navigate, Link,
+  BrowserRouter as Router, Routes, Route, useLocation, Navigate,
 } from 'react-router-dom';
-import { Button, Navbar, Container } from 'react-bootstrap';
-import AuthContext from '../contexts/index.jsx';
-import useAuth from '../hooks/index.jsx';
+import axios from 'axios';
+/// import { useDispatch } from 'react-redux';
+import { AuthContext } from '../contexts/index.js';
+import { useAuth } from '../hooks/index.js';
 import LoginPage from './LoginPage.jsx';
 import PageNotFound from './PageNotFound.jsx';
 import Chat from './Chat.jsx';
+import Navigation from './Navigation.jsx';
+import routes from '../routes';
 
 const initialAuthState = () => {
+  // @ts-ignore
   const localStorageData = JSON.parse(localStorage.getItem('userId'));
-  console.log('fdfdfdf', (localStorageData && localStorageData.token));
-  return (localStorageData && localStorageData.token);
+  return !!(localStorageData && localStorageData.token);
+};
+
+const getAuthHeader = () => {
+  const userId = JSON.parse(localStorage.getItem('userId'));
+  if (userId && userId.token) {
+    return { Authorization: `Bearer ${userId.token}` };
+  }
+  return {};
 };
 
 const AuthProvider = ({ children }) => {
@@ -24,18 +35,12 @@ const AuthProvider = ({ children }) => {
   };
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
-    <AuthContext.Provider value={{ loggedIn, logIn, logOut }}>
+    <AuthContext.Provider value={{
+      loggedIn, logIn, logOut, getAuthHeader,
+    }}
+    >
       {children}
     </AuthContext.Provider>
-  );
-};
-
-const AuthButton = () => {
-  const auth = useAuth();
-  return (
-    auth.loggedIn
-      ? <Button onClick={auth.logOut}>Log out</Button>
-      : null
   );
 };
 
@@ -47,27 +52,24 @@ const RequireAuth = ({ children }) => {
   );
 };
 
-const App = ({ children }) => {
+const getStore = () => axios.get(routes.usersPath(), { headers: getAuthHeader() })
+  .then((response) => console.log('response is: ', response))
+  .catch((e) => console.log('error is: ', e))
+  .finally(() => console.log('header is: ', getAuthHeader()));
+
+const App = () => {
   const result = (
     <AuthProvider>
       <div className="d-flex flex-column h-100">
         <Router>
-          <Navbar className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
-            <Container>
-              <Navbar.Brand as={Link} href="/">Hexlet Chat</Navbar.Brand>
-              <Navbar.Brand as={Button} onClick={() => console.log(localStorage.getItem('userId'))}>
-                Show localStorage
-              </Navbar.Brand>
-              <AuthButton />
-            </Container>
-          </Navbar>
+          <Navigation />
+          <button type="button" onClick={() => getStore()}>getStore</button>
           <Routes>
             <Route path="/" element={(<RequireAuth><Chat /></RequireAuth>)} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Router>
-        {children}
       </div>
     </AuthProvider>
   );

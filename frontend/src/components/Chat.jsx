@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
 
 import ChannelsBox from './ChannelsBox.jsx';
+import MessagesBox from './MessagesBox.jsx';
 
 import { actions as channelsActions } from '../slices/channelsSlice.js';
 import { actions as messagesActions } from '../slices/messagesSlice.js';
@@ -21,7 +22,6 @@ const Chat = () => {
       // @ts-ignore
       const { data } = await axios.get(routes.usersPath(), { headers: auth.getAuthHeader() });
       const { messages, channels, currentChannelId } = data;
-      console.log('messages and channels from server: ', messages, channels);
       dispatch(channelsActions.addChannels({ channels, currentChannelId }));
       dispatch(messagesActions.addMessages({ messages }));
     };
@@ -34,7 +34,9 @@ const Chat = () => {
         <Col className="border-end pt-5 px-0 bg-light" md={2} xs={4}>
           <ChannelsBox />
         </Col>
-        <Col>MessagesBox</Col>
+        <Col className="p-0 h-100">
+          <MessagesBox />
+        </Col>
       </Row>
     </Container>
   );

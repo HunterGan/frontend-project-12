@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Navbar, Container } from 'react-bootstrap';
-import { useAuth, useActions } from '../hooks/index.js';
+import { useAuth } from '../hooks/index.js';
 
 const AuthButton = () => {
   const auth = useAuth();
@@ -11,18 +11,13 @@ const AuthButton = () => {
   );
 };
 
-const Navigation = () => {
-  const chatActions = useActions();
-  /// chatActions.sendMessage({ body: 'message text', channelId: 1, username: 'admin' })
-  console.log('chatActions', chatActions);
-  return (
-    <Navbar expand="lg" bg="white" className="shadow-sm">
-      <Container>
-        <Navbar.Brand as={Button} href="/">Hexlet Chat</Navbar.Brand>
-        <AuthButton />
-      </Container>
-    </Navbar>
-  );
-};
+const Navigation = () => (
+  <Navbar expand="lg" bg="white" className="shadow-sm">
+    <Container>
+      <Navbar.Brand as={Button} href="/">Hexlet Chat</Navbar.Brand>
+      <AuthButton />
+    </Container>
+  </Navbar>
+);
 
 export default Navigation;

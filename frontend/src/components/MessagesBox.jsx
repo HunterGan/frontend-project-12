@@ -1,7 +1,8 @@
 // @ts-check
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import NewMessagesForm from './NewMessagesForm.jsx';
 
 const MessagesBoxHeader = ({ messages, currentChannelId }) => (
   <div className="bg-light mb-4 p-3 shadow-sm small">
@@ -18,21 +19,20 @@ const Message = ({ body, userName }) => (
     {`: ${body}`}
   </div>
 );
-const messes = Array(20).fill(null).map((el, ind) => {
-  const message = {
-    body: `Message N ${ind}`,
-    id: ind + 1,
-    userName: 'Harry Potter',
-    channelId: 1,
-  };
-  return message;
-});
 
 const MessagesBox = () => {
-  console.log('messagesBox', messes);
   const { currentChannelId } = useSelector((state) => state.channelsReducer);
-  /// const { messages } = useSelector((state) => state.messagesReducer);
-  const curChannelMessages = messes;
+  const { messages } = useSelector((state) => state.messagesReducer);
+  const curChannelMessages = messages.filter((m) => m.channelId === currentChannelId);
+  const messagesEndRef = useRef(null);
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [curChannelMessages]);
   /// = messages.filter((message) => message.channelId !== currentChannelId);
   return (
     <div className="d-flex flex-column h-100">
@@ -45,7 +45,9 @@ const MessagesBox = () => {
             userName={message.userName}
           />
         ))}
+        <div ref={messagesEndRef} />
       </div>
+      <NewMessagesForm messages={curChannelMessages} />
     </div>
   );
 };

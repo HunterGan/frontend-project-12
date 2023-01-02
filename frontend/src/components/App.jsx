@@ -8,7 +8,7 @@ import { AuthContext } from '../contexts/index.js';
 import { useAuth } from '../hooks/index.js';
 import LoginPage from './LoginPage.jsx';
 import PageNotFound from './PageNotFound.jsx';
-import Chat from './Chat.jsx';
+import ChatPage from './ChatPage.jsx';
 import Navigation from './Navigation.jsx';
 import routes from '../routes';
 
@@ -33,10 +33,11 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem('userId');
     setLoggedIn(false);
   };
+  const user = JSON.parse(localStorage.getItem('userId'));
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     <AuthContext.Provider value={{
-      loggedIn, logIn, logOut, getAuthHeader,
+      loggedIn, logIn, logOut, getAuthHeader, user,
     }}
     >
       {children}
@@ -65,7 +66,7 @@ const App = () => {
           <Navigation />
           <button type="button" onClick={() => getStore()}>getStore</button>
           <Routes>
-            <Route path="/" element={(<RequireAuth><Chat /></RequireAuth>)} />
+            <Route path="/" element={(<RequireAuth><ChatPage /></RequireAuth>)} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>

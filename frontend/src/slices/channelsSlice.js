@@ -34,7 +34,6 @@ const channelsSlice = createSlice({
     },
     setActiveChannel(state, { payload }) {
       const { id } = payload;
-      console.log('payload: ', payload);
       state.currentChannelId = id;
     },
   },

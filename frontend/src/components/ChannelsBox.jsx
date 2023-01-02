@@ -25,7 +25,7 @@ const ChannelsHeader = ({ addChannel }) => (
 
 // eslint-disable-next-line object-curly-newline
 const Channel = ({ channel, isActive, handleActions }) => {
-  console.log('setActiveChannel', handleActions);
+  const variant = isActive ? 'secondary' : '';
   /// --- create removable or static channel ---
   return (
     <Nav.Item as="li" className="w-100">
@@ -33,7 +33,7 @@ const Channel = ({ channel, isActive, handleActions }) => {
         <Dropdown as={ButtonGroup} className="d-flex">
           <Button
             type="button"
-            variant={isActive && 'secondary'}
+            variant={variant}
             className="w-100 rounded-0 text-start text-truncate"
             onClick={handleActions.setActiveChannel(channel.id)}
           >

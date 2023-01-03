@@ -7,6 +7,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import ChannelsBox from './ChannelsBox.jsx';
 import MessagesBox from './MessagesBox.jsx';
+import ModalPage from './ModalPage.jsx';
 
 import { actions as channelsActions } from '../slices/channelsSlice.js';
 import { actions as messagesActions } from '../slices/messagesSlice.js';
@@ -29,16 +30,19 @@ const Chat = () => {
   });
 
   return (
-    <Container className="h-100 my-4 overflow-hidden rounded shadow">
-      <Row className="h-100 bg-white flex-md-row">
-        <Col className="border-end pt-5 px-0 bg-light" md={2} xs={4}>
-          <ChannelsBox />
-        </Col>
-        <Col className="p-0 h-100">
-          <MessagesBox />
-        </Col>
-      </Row>
-    </Container>
+    <>
+      <ModalPage />
+      <Container className="h-100 my-4 overflow-hidden rounded shadow">
+        <Row className="h-100 bg-white flex-md-row">
+          <Col className="border-end pt-5 px-0 bg-light" md={2} xs={4}>
+            <ChannelsBox />
+          </Col>
+          <Col className="p-0 h-100">
+            <MessagesBox />
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 };
 export default Chat;

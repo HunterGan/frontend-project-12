@@ -33,7 +33,6 @@ const MessagesBox = () => {
   useEffect(() => {
     scrollToBottom();
   }, [curChannelMessages]);
-  /// = messages.filter((message) => message.channelId !== currentChannelId);
   return (
     <div className="d-flex flex-column h-100">
       <MessagesBoxHeader messages={curChannelMessages} currentChannelId={currentChannelId} />

@@ -47,9 +47,14 @@ const AddChannel = ({ handleClose }) => {
               ref={inputRef}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.name}
+              value={formik.values.channel}
               name="channel"
+              id="channel"
             />
+            <label className="visually-hidden" htmlFor="channel">TranslateChannel</label>
+            <Form.Control.Feedback type="invalid">
+              TranslateError
+            </Form.Control.Feedback>
           </FormGroup>
           <Button type="submit" className="btn-primary mt-2" value="submit" />
         </Form>

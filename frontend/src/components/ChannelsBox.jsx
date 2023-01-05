@@ -45,7 +45,9 @@ const Channel = ({ channel, isActive, handleActions }) => {
             <span className="visually-hidden">translateManageChannel</span>
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item onClick={handleActions.removeChannel}>translateDelete</Dropdown.Item>
+            <Dropdown.Item onClick={handleActions.removeChannel(channel.id)}>
+              translateDelete
+            </Dropdown.Item>
             <Dropdown.Item onClick={handleActions.renameChannel}>translateRename</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
@@ -71,9 +73,9 @@ const ChannelsBox = () => {
   /// --- Create actions for handling actions of channels ---
   const handleActions = {
     setActiveChannel: (id) => () => dispatch(actions.setActiveChannel({ id })),
-    removeChannel: () => console.log('open modal Remove channel'),
+    removeChannel: (id) => () => dispatch(modalActions.openModal({ type: 'remove', id })),
     renameChannel: () => console.log('open modal Rename channel'),
-    addChannel: () => dispatch(modalActions.openModal({ type: 'openAdding' })),
+    addChannel: () => dispatch(modalActions.openModal({ type: 'add' })),
   };
   // @ts-ignore
   const { channels, currentChannelId } = useSelector((state) => state.channelsReducer);

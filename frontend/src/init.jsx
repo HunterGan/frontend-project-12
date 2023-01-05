@@ -11,7 +11,7 @@ import App from './components/App.jsx';
 
 export default async (socket) => {
   const ActionsProvider = ({ children }) => {
-    const acknowledge = (response) => console.log('acknowledge is', response.status);
+    const acknowledge = (response) => console.log('acknowledge is', response);
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     const chatActions = {
       sendMessage: (data) => socket.emit('newMessage', data, acknowledge),

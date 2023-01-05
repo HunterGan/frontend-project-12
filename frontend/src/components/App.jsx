@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import {
   BrowserRouter as Router, Routes, Route, useLocation, Navigate,
 } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 import axios from 'axios';
 /// import { useDispatch } from 'react-redux';
 import { AuthContext } from '../contexts/index.js';
@@ -59,12 +61,14 @@ const getStore = () => axios.get(routes.usersPath(), { headers: getAuthHeader() 
   .finally(() => console.log('header is: ', getAuthHeader()));
 
 const App = () => {
+  const { messages } = useSelector((state) => state.messagesReducer);
   const result = (
     <AuthProvider>
       <div className="d-flex flex-column h-100">
         <Router>
           <Navigation />
-          <button type="button" onClick={() => getStore()}>getStore</button>
+          <button type="button" onClick={() => getStore()}>serverData</button>
+          <button type="button" onClick={() => console.log(messages)}>reduxStorage</button>
           <Routes>
             <Route path="/" element={(<RequireAuth><ChatPage /></RequireAuth>)} />
             <Route path="/login" element={<LoginPage />} />

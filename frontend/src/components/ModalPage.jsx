@@ -66,7 +66,6 @@ const AddChannel = ({ handleClose }) => {
 };
 
 const RemoveChannel = ({ handleClose, id }) => {
-  console.log('deleting channel id: ', id);
   const { removeChannel } = useActions();
   const handleRemove = async () => {
     try {
@@ -104,22 +103,73 @@ const RemoveChannel = ({ handleClose, id }) => {
     </>
   );
 };
-const renameChannel = () => { };
+const RenameChannel = ({ id, handleClose }) => {
+  const inputRef = useRef();
+  const { channels } = useSelector((state) => state.channelsReducer);
+  const { renameChannel } = useActions();
+  const formik = useFormik({
+    initialValues: {
+      channel: '',
+    },
+    validationSchema: yup.object().shape({
+      channel: yup.string().trim().required().notOneOf(channels.map((channel) => channel.name)),
+    }),
+    onSubmit: async (value) => {
+      try {
+        await renameChannel({ id, name: value.channel });
+        handleClose();
+      } catch (e) {
+        formik.setSubmitting(false);
+        console.log(e);
+        inputRef.focus();
+      }
+      /// formik.setSubmitting(false);
+    },
+  });
+  return (
+    <>
+      <Modal.Header closeButton onHide={handleClose}>
+        <Modal.Title>translateAddChannel</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={formik.handleSubmit}>
+          <FormGroup>
+            <FormControl
+              required
+              className="mb-2"
+              ref={inputRef}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.channel}
+              name="channel"
+              id="channel"
+            />
+            <Form.Label className="visually-hidden" htmlFor="channel">TranslateChannel</Form.Label>
+            <Form.Control.Feedback type="invalid">
+              TranslateError
+            </Form.Control.Feedback>
+            <div className="d-flex justify-content-end">
+              <Button onClick={handleClose} className="me-2" type="button" variant="secondary">translateCancel</Button>
+              <Button disabled={formik.isSubmitting} type="submit" variant="primary">translateCancel</Button>
+            </div>
+          </FormGroup>
+        </Form>
+      </Modal.Body>
+    </>
+  );
+};
 
 const modals = {
   add: AddChannel,
   remove: RemoveChannel,
-  renameChannel,
+  rename: RenameChannel,
 };
 
 const ModalPage = () => {
-  console.log('Modal1');
   const dispatch = useDispatch();
   const { type, id, active } = useSelector((state) => state.modalsReducer);
-  console.log('Modal2');
   const handleClose = () => dispatch(actions.closeModal());
   const Component = modals[type];
-  console.log('Modal3', active);
   return (
     <Modal show={active}>
       {Component && <Component handleClose={handleClose} id={id} />}

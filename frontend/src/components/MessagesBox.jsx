@@ -46,7 +46,9 @@ const MessagesBox = () => {
         ))}
         <div ref={messagesEndRef} />
       </div>
-      <NewMessagesForm messages={curChannelMessages} />
+      <div className="mt-auto px-5 py-3">
+        <NewMessagesForm messages={curChannelMessages} />
+      </div>
     </div>
   );
 };

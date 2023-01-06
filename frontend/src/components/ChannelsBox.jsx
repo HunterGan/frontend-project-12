@@ -48,7 +48,9 @@ const Channel = ({ channel, isActive, handleActions }) => {
             <Dropdown.Item onClick={handleActions.removeChannel(channel.id)}>
               translateDelete
             </Dropdown.Item>
-            <Dropdown.Item onClick={handleActions.renameChannel}>translateRename</Dropdown.Item>
+            <Dropdown.Item onClick={handleActions.renameChannel(channel.id)}>
+              translateRename
+            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       )
@@ -74,7 +76,7 @@ const ChannelsBox = () => {
   const handleActions = {
     setActiveChannel: (id) => () => dispatch(actions.setActiveChannel({ id })),
     removeChannel: (id) => () => dispatch(modalActions.openModal({ type: 'remove', id })),
-    renameChannel: () => console.log('open modal Rename channel'),
+    renameChannel: (id) => () => dispatch(modalActions.openModal({ type: 'rename', id })),
     addChannel: () => dispatch(modalActions.openModal({ type: 'add' })),
   };
   // @ts-ignore

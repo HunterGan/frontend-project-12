@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Container, Row, Col, Card, Form, FloatingLabel, Button,
@@ -14,6 +14,7 @@ const LoginPage = () => {
   const inputRef = useRef();
   const location = useLocation();
   const navigate = useNavigate();
+  const [authFailed, setAuthFailed] = useState(false);
   useEffect(() => {
     inputRef.current.focus();
   }, []);
@@ -28,6 +29,7 @@ const LoginPage = () => {
     }),
     onSubmit: async (values) => {
       try {
+        setAuthFailed(false);
         const res = await axios.post(routes.loginPath(), values);
         localStorage.setItem('userId', JSON.stringify(res.data));
         auth.logIn();
@@ -36,6 +38,7 @@ const LoginPage = () => {
       } catch (err) {
         formik.setSubmitting(false);
         if (err.isAxiosError && err.response.status === 401) {
+          setAuthFailed(true);
           inputRef.current.select();
           return;
         }
@@ -54,27 +57,31 @@ const LoginPage = () => {
               </Col>
               <Form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={formik.handleSubmit}>
                 <h1 className="text-center mb-4">translate Войти</h1>
-                <FloatingLabel className="mb-3" label="username" controlId="username">
+                <FloatingLabel className="mb-3" label="username">
                   <Form.Control
-                    placeholder="translateYourNickname"
-                    type="text"
                     onChange={formik.handleChange}
                     value={formik.values.username}
-                    isInvalid={auth.loggedIn}
+                    placeholder="translateUsername"
+                    name="username"
+                    id="username"
+                    isInvalid={authFailed}
                     ref={inputRef}
                     required
                   />
                 </FloatingLabel>
-                <FloatingLabel className="mb-4" label="password" controlId="password">
+                <FloatingLabel className="mb-4" label="password">
                   <Form.Control
-                    placeholder="translateПароль"
                     type="password"
                     onChange={formik.handleChange}
                     value={formik.values.password}
-                    isInvalid={auth.loggedIn}
+                    name="password"
+                    id="password"
+                    autoComplete="current-password"
+                    isInvalid={authFailed}
                     required
+                    placeholder="translateUserPassword"
                   />
-                  <Form.Control.Feedback type="invalid" tooltip>Please choose a username.</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid" tooltip>translateWrong username or password</Form.Control.Feedback>
                 </FloatingLabel>
                 <Button variant="outline-primary" type="submit" className="w-100 mb-3">Войти</Button>
               </Form>

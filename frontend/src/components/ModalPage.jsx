@@ -7,10 +7,12 @@ import {
   Modal, FormGroup, FormControl, Form, Button,
 } from 'react-bootstrap';
 import { actions } from '../slices/modalsSlice.js';
+import { actions as channelsActions } from '../slices/channelsSlice.js';
 import { useActions } from '../hooks/index.js';
 
 const AddChannel = ({ handleClose }) => {
   const inputRef = useRef();
+  const dispatch = useDispatch();
   const { channels } = useSelector((state) => state.channelsReducer);
   const { createChannel } = useActions();
   const formik = useFormik({
@@ -22,7 +24,9 @@ const AddChannel = ({ handleClose }) => {
     }),
     onSubmit: async (value) => {
       try {
-        await createChannel({ name: value.channel });
+        const res = await createChannel({ name: value.channel });
+        dispatch(channelsActions.setActiveChannel(res.data.id));
+        console.log('RESULT IS: ', res);
         handleClose();
       } catch (e) {
         formik.setSubmitting(false);
@@ -121,7 +125,7 @@ const RenameChannel = ({ id, handleClose }) => {
       } catch (e) {
         formik.setSubmitting(false);
         console.log(e);
-        inputRef.focus();
+        inputRef.currentfocus();
       }
       /// formik.setSubmitting(false);
     },

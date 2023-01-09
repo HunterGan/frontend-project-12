@@ -12,6 +12,7 @@ import LoginPage from './LoginPage.jsx';
 import PageNotFound from './PageNotFound.jsx';
 import ChatPage from './ChatPage.jsx';
 import Navigation from './Navigation.jsx';
+import SignUpPage from './SignUpPage.jsx';
 import routes from '../routes';
 
 const initialAuthState = () => {
@@ -72,6 +73,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={(<RequireAuth><ChatPage /></RequireAuth>)} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Router>

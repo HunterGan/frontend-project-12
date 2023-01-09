@@ -25,13 +25,14 @@ const AddChannel = ({ handleClose }) => {
     onSubmit: async (value) => {
       try {
         const res = await createChannel({ name: value.channel });
-        dispatch(channelsActions.setActiveChannel(res.data.id));
+        dispatch(channelsActions.setActiveChannel(res.data));
         console.log('RESULT IS: ', res);
         handleClose();
       } catch (e) {
+        console.log('ERRORORORORO is', e);
         formik.setSubmitting(false);
         console.log(e);
-        inputRef.focus();
+        inputRef.current.focus();
       }
       /// formik.setSubmitting(false);
     },

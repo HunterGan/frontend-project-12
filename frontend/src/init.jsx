@@ -11,20 +11,17 @@ import App from './components/App.jsx';
 
 export default async (socket) => {
   const ActionsProvider = ({ children }) => {
-    const acknowledge = (type, data) => {
-      const promise = new Promise((resolve, reject) => {
-        socket.volatile.emit(type, data, (response) => {
-          console.log('response is: ', response);
-          if (response.status === 'ok') {
-            resolve(response);
-          }
-          reject();
-        });
+    const acknowledge = (type, data) => new Promise((resolve, reject) => {
+      socket.timeout(3000).volatile.emit(type, data, (err, response) => {
+        console.log('response is: ', response);
+        if (err) {
+          reject(err);
+        } else if (response.status === 'ok') {
+          resolve(response);
+        }
+        reject(err);
       });
-      console.log('after emit');
-      return promise;
-    };
-
+    });
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     const chatActions = {
       sendMessage: (data) => socket.emit('newMessage', data, acknowledge),

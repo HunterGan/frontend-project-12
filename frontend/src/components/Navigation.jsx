@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Navbar, Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/index.js';
 
 const AuthButton = () => {
@@ -14,7 +15,7 @@ const AuthButton = () => {
 const Navigation = () => (
   <Navbar expand="lg" bg="white" className="shadow-sm">
     <Container>
-      <Navbar.Brand as={Button} href="/">Hexlet Chat</Navbar.Brand>
+      <Navbar.Brand as={Link} href="/">Hexlet Chat</Navbar.Brand>
       <AuthButton />
     </Container>
   </Navbar>

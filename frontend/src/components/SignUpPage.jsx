@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {
   Container, Row, Col, Card, Form, FloatingLabel, Button,
@@ -10,6 +11,7 @@ import routes from '../routes';
 import { useAuth } from '../hooks/index.js';
 
 const SignUpPage = () => {
+  const { t } = useTranslation();
   const auth = useAuth();
   const inputRef = useRef();
   const navigate = useNavigate();
@@ -23,11 +25,11 @@ const SignUpPage = () => {
       password: '',
     },
     validationSchema: yup.object().shape({
-      username: yup.string().trim().min(3).max(20)
-        .required(),
-      password: yup.string().min(6).required(),
-      confirmPassword: yup.string().min(6).required()
-        .oneOf([yup.ref('password')], 'Your passwords do not match.'),
+      username: yup.string().trim().min(3, 'userNameSize').max(20, 'userNameSize')
+        .required('required'),
+      password: yup.string().min(6, 'passwordSize').required('required'),
+      confirmPassword: yup.string().min(6, 'passwordSize').required('required')
+        .oneOf([yup.ref('password')], 'passwordMatch'),
     }),
     onSubmit: async (values) => {
       try {
@@ -54,16 +56,16 @@ const SignUpPage = () => {
           <Card className="shadow-sm">
             <Card.Body className="d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
               <div>
-                <Card.Img src="images/signUpImage.jpg" className="rounded-circle" alt="translateEnter" />
+                <Card.Img src="images/signUpImage.jpg" className="rounded-circle" alt={t('signup.registration')} />
               </div>
               <Form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={formik.handleSubmit}>
-                <h1 className="text-center mb-4">translateRegistration</h1>
-                <FloatingLabel className="mb-3" label="translateUserName">
+                <h1 className="text-center mb-4">{t('signup.registration')}</h1>
+                <FloatingLabel className="mb-3" label={t('signup.userName')}>
                   <Form.Control
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.username}
-                    placeholder="translateOt 3 do 20 simolov"
+                    placeholder={t('signup.userNameSize')}
                     name="username"
                     id="username"
                     autoComplete="username"
@@ -73,36 +75,36 @@ const SignUpPage = () => {
                   />
                   {formik.errors.username && (
                     <Form.Control.Feedback type="invalid" placement="right" tooltip>
-                      translateUserNameError
+                      {t(`signup.${formik.errors.username}`)}
                     </Form.Control.Feedback>
                   )}
                 </FloatingLabel>
-                <FloatingLabel className="mb-4" label="translatePassword">
+                <FloatingLabel className="mb-4" label="{t('signup.password')}">
                   <Form.Control
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.password}
                     aria-describedby="passwordHelpBlock"
-                    placeholder="translateNe menee 6 simvolov"
+                    placeholder={t('signup.passwordSize')}
                     name="password"
                     id="password"
                     type="password"
-                    autoComplete="password"
+                    autoComplete="new-password"
                     isInvalid={(formik.errors.password && formik.touched.password) || signUpFailed}
                     required
                   />
                   {formik.errors.password && (
                     <Form.Control.Feedback type="invalid" placement="right" tooltip>
-                      translatePasswordError
+                      {t(`signup.${formik.errors.password}`)}
                     </Form.Control.Feedback>
                   )}
                 </FloatingLabel>
-                <FloatingLabel className="mb-4" label="translateconfirmPassword">
+                <FloatingLabel className="mb-4" label={t('signup.confirmPassword')}>
                   <Form.Control
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.confirmPassword}
-                    placeholder="translateNe menee 6 simvolov"
+                    placeholder={t('signup.passwordMatch')}
                     name="confirmPassword"
                     id="confirmPassword"
                     type="password"
@@ -112,10 +114,10 @@ const SignUpPage = () => {
                     required
                   />
                   <Form.Control.Feedback type="invalid" placement="right" tooltip>
-                    {signUpFailed ? 'translateUserExists' : formik.errors.confirmPassword}
+                    {signUpFailed ? t('signup.userExists') : t(`signup.${formik.errors.confirmPassword}`)}
                   </Form.Control.Feedback>
                 </FloatingLabel>
-                <Button variant="outline-primary" type="submit" className="w-100 mb-3">translateRegister</Button>
+                <Button variant="outline-primary" type="submit" className="w-100 mb-3">{t('signup.submit')}</Button>
               </Form>
             </Card.Body>
           </Card>

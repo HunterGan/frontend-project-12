@@ -2,7 +2,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { io } from 'socket.io-client';
-import './index.css';
 import initChat from './init.jsx';
 
 const app = async () => {

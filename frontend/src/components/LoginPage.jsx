@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Container, Row, Col, Card, Form, FloatingLabel, Button,
 } from 'react-bootstrap';
@@ -14,6 +15,7 @@ const LoginPage = () => {
   const inputRef = useRef();
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [authFailed, setAuthFailed] = useState(false);
   useEffect(() => {
     inputRef.current.focus();
@@ -24,8 +26,8 @@ const LoginPage = () => {
       password: '',
     },
     validationSchema: yup.object().shape({
-      username: yup.string().required(),
-      password: yup.string().required(),
+      username: yup.string().required('usernameRequired'),
+      password: yup.string().required('passwordRequired'),
     }),
     onSubmit: async (values) => {
       try {
@@ -53,15 +55,15 @@ const LoginPage = () => {
           <Card className="shadow-sm">
             <Card.Body className="row p-5">
               <Col xs={12} md={6} className="d-flex align-items-center justify-content-center">
-                <Card.Img src="images/loginImage.jpeg" className="rounded-circle" alt="translateEnter" />
+                <Card.Img src="images/loginImage.jpeg" className="rounded-circle" alt={t('login.login')} />
               </Col>
               <Form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={formik.handleSubmit}>
-                <h1 className="text-center mb-4">translate Войти</h1>
-                <FloatingLabel className="mb-3" label="username">
+                <h1 className="text-center mb-4">{t('login.login')}</h1>
+                <FloatingLabel className="mb-3" label={t('login.username')}>
                   <Form.Control
                     onChange={formik.handleChange}
                     value={formik.values.username}
-                    placeholder="translateUsername"
+                    placeholder={t('login.username')}
                     name="username"
                     id="username"
                     isInvalid={authFailed}
@@ -69,7 +71,7 @@ const LoginPage = () => {
                     required
                   />
                 </FloatingLabel>
-                <FloatingLabel className="mb-4" label="password">
+                <FloatingLabel className="mb-4" label={t('login.password')}>
                   <Form.Control
                     type="password"
                     onChange={formik.handleChange}
@@ -79,17 +81,17 @@ const LoginPage = () => {
                     autoComplete="current-password"
                     isInvalid={authFailed}
                     required
-                    placeholder="translateUserPassword"
+                    placeholder={t('login.password')}
                   />
-                  <Form.Control.Feedback type="invalid" tooltip>translateWrong username or password</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid" tooltip>{t('login.failed')}</Form.Control.Feedback>
                 </FloatingLabel>
-                <Button variant="outline-primary" type="submit" className="w-100 mb-3">Войти</Button>
+                <Button variant="outline-primary" type="submit" className="w-100 mb-3">{t('login.login')}</Button>
               </Form>
             </Card.Body>
             <Card.Footer className="p-4">
               <div className="text-center">
-                <span>Нет аккаунта?</span>
-                <a href="/signup">Регистрация</a>
+                <span>{t('login.noAccount')}</span>
+                <a href="/signup">{t('login.signup')}</a>
               </div>
             </Card.Footer>
           </Card>

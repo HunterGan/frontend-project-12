@@ -11,7 +11,6 @@ const messagesSlice = createSlice({
   initialState,
   reducers: {
     addMessage(state, { payload }) {
-      console.log('ADDING: ', payload);
       state.messages.push(payload);
     },
     addMessages(state, { payload }) {

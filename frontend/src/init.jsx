@@ -1,10 +1,12 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import i18next from 'i18next';
+import { I18nextProvider, initReactI18next } from 'react-i18next';
 
 import store from './slices/index.js';
 import { actions as channelsActions } from './slices/channelsSlice.js';
 import { actions as messagesActions } from './slices/messagesSlice.js';
-/// import { selectors } from '../slices/usersSlice.js';
+import resources from './locales/index.js';
 
 import { ActionsContext } from './contexts/index.js';
 import App from './components/App.jsx';
@@ -13,7 +15,6 @@ export default async (socket) => {
   const ActionsProvider = ({ children }) => {
     const acknowledge = (type, data) => new Promise((resolve, reject) => {
       socket.timeout(3000).volatile.emit(type, data, (err, response) => {
-        console.log('response is: ', response);
         if (err) {
           reject(err);
         } else if (response.status === 'ok') {
@@ -24,10 +25,10 @@ export default async (socket) => {
     });
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     const chatActions = {
-      sendMessage: (data) => socket.emit('newMessage', data, acknowledge),
+      sendMessage: (data) => acknowledge('newMessage', data),
       createChannel: (data) => acknowledge('newChannel', data),
-      renameChannel: (data) => socket.emit('renameChannel', data, acknowledge),
-      removeChannel: (data) => socket.emit('removeChannel', data, acknowledge),
+      renameChannel: (data) => acknowledge('renameChannel', data),
+      removeChannel: (data) => acknowledge('removeChannel', data),
     };
     return (
       <ActionsContext.Provider value={chatActions}>
@@ -36,20 +37,24 @@ export default async (socket) => {
     );
   };
 
+  const i18nextInstance = i18next.createInstance();
+  await i18nextInstance
+    .use(initReactI18next)
+    .init({
+      resources,
+      fallbackLng: 'ru',
+    });
+
   socket.on('newMessage', (payload) => {
-    console.log('socket newMessage(payload): ', payload);
     store.dispatch(messagesActions.addMessage(payload));
   });
   socket.on('newChannel', (payload) => {
-    console.log('socket newChannel(payload): ', payload);
     store.dispatch(channelsActions.addChannel(payload));
   });
   socket.on('removeChannel', (payload) => {
-    console.log('socket removeChannel(payload): ', payload);
     store.dispatch(channelsActions.removeChannel(payload));
   });
   socket.on('renameChannel', (payload) => {
-    console.log('socket renameChannel(payload): ', payload);
     store.dispatch(channelsActions.renameChannel({
       channelId: payload.id,
       channelName: payload.name,
@@ -57,9 +62,11 @@ export default async (socket) => {
   });
   const vdom = (
     <Provider store={store}>
-      <ActionsProvider>
-        <App />
-      </ActionsProvider>
+      <I18nextProvider i18n={i18nextInstance}>
+        <ActionsProvider>
+          <App />
+        </ActionsProvider>
+      </I18nextProvider>
     </Provider>
   );
 

@@ -2,30 +2,33 @@
 
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import {
   Dropdown, Nav, Button, ButtonGroup,
 } from 'react-bootstrap';
 import { PlusSquare } from 'react-bootstrap-icons';
-import { actions } from '../slices/channelsSlice.js';
+import { actions as channelsActions } from '../slices/channelsSlice.js';
 import { actions as modalActions } from '../slices/modalsSlice.js';
-/// import { useActions } from '../hooks/index.js';
 
-const ChannelsHeader = ({ addChannel }) => (
-  <div className="d-flex justify-content-between mb-2 ps-4 pe-2">
-    <span>??Channels</span>
-    <button
-      type="button"
-      className="p-0 text-primary btn btn-group-vertical"
-      onClick={addChannel}
-    >
-      <PlusSquare size={20} />
-      <span className="visually-hidden">+</span>
-    </button>
-  </div>
-);
-
+const ChannelsHeader = ({ addChannel }) => {
+  const { t } = useTranslation();
+  return (
+    <div className="d-flex justify-content-between mb-2 ps-4 pe-2">
+      <span>{t('channels.channels')}</span>
+      <button
+        type="button"
+        className="p-0 text-primary btn btn-group-vertical"
+        onClick={addChannel}
+      >
+        <PlusSquare size={20} />
+        <span className="visually-hidden">+</span>
+      </button>
+    </div>
+  );
+};
 // eslint-disable-next-line object-curly-newline
 const Channel = ({ channel, isActive, handleActions }) => {
+  const { t } = useTranslation();
   const variant = isActive ? 'secondary' : '';
   /// --- create removable or static channel ---
   return (
@@ -42,14 +45,14 @@ const Channel = ({ channel, isActive, handleActions }) => {
             {channel.name}
           </Button>
           <Dropdown.Toggle split className="flex-grow-0" variant={isActive && 'secondary'}>
-            <span className="visually-hidden">translateManageChannel</span>
+            <span className="visually-hidden">{t('channels.manageChannel')}</span>
           </Dropdown.Toggle>
           <Dropdown.Menu>
             <Dropdown.Item onClick={handleActions.removeChannel(channel.id)}>
-              translateDelete
+              {t('channels.delete')}
             </Dropdown.Item>
             <Dropdown.Item onClick={handleActions.renameChannel(channel.id)}>
-              translateRename
+              {t('channels.rename')}
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
@@ -74,7 +77,7 @@ const ChannelsBox = () => {
   const dispatch = useDispatch();
   /// --- Create actions for handling actions of channels ---
   const handleActions = {
-    setActiveChannel: (id) => () => dispatch(actions.setActiveChannel({ id })),
+    setActiveChannel: (id) => () => dispatch(channelsActions.setActiveChannel({ id })),
     removeChannel: (id) => () => dispatch(modalActions.openModal({ type: 'remove', id })),
     renameChannel: (id) => () => dispatch(modalActions.openModal({ type: 'rename', id })),
     addChannel: () => dispatch(modalActions.openModal({ type: 'add' })),

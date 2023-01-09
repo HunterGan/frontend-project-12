@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-/// import _ from 'lodash';
+import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
@@ -11,6 +11,7 @@ import { actions as channelsActions } from '../slices/channelsSlice.js';
 import { useActions } from '../hooks/index.js';
 
 const AddChannel = ({ handleClose }) => {
+  const { t } = useTranslation();
   const inputRef = useRef();
   const dispatch = useDispatch();
   const { channels } = useSelector((state) => state.channelsReducer);
@@ -20,27 +21,23 @@ const AddChannel = ({ handleClose }) => {
       channel: '',
     },
     validationSchema: yup.object().shape({
-      channel: yup.string().trim().required().notOneOf(channels.map((channel) => channel.name)),
+      channel: yup.string().trim().required('required').notOneOf(channels.map((channel) => channel.name), 'unique'),
     }),
     onSubmit: async (value) => {
       try {
         const res = await createChannel({ name: value.channel });
         dispatch(channelsActions.setActiveChannel(res.data));
-        console.log('RESULT IS: ', res);
         handleClose();
       } catch (e) {
-        console.log('ERRORORORORO is', e);
         formik.setSubmitting(false);
-        console.log(e);
         inputRef.current.focus();
       }
-      /// formik.setSubmitting(false);
     },
   });
   return (
     <>
       <Modal.Header closeButton onHide={handleClose}>
-        <Modal.Title>translateAddChannel</Modal.Title>
+        <Modal.Title>{t('modal.addChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
@@ -55,13 +52,13 @@ const AddChannel = ({ handleClose }) => {
               name="channel"
               id="channel"
             />
-            <Form.Label className="visually-hidden" htmlFor="channel">TranslateChannel</Form.Label>
+            <Form.Label className="visually-hidden" htmlFor="channel">{t('modal.channelName')}</Form.Label>
             <Form.Control.Feedback type="invalid">
-              TranslateError
+              {t(`modal.${formik.errors.name}`)}
             </Form.Control.Feedback>
             <div className="d-flex justify-content-end">
-              <Button onClick={handleClose} className="me-2" type="button" variant="secondary">translateCancel</Button>
-              <Button disabled={formik.isSubmitting} type="submit" variant="primary">translateCancel</Button>
+              <Button onClick={handleClose} className="me-2" type="button" variant="secondary">{t('modal.cancel')}</Button>
+              <Button disabled={formik.isSubmitting} type="submit" variant="primary">{t('modal.submit')}</Button>
             </div>
           </FormGroup>
         </Form>
@@ -72,36 +69,41 @@ const AddChannel = ({ handleClose }) => {
 
 const RemoveChannel = ({ handleClose, id }) => {
   const { removeChannel } = useActions();
+  const { t } = useTranslation();
+  const [disabled, setDisabled] = useState(false);
   const handleRemove = async () => {
     try {
+      setDisabled(true);
       await removeChannel({ id });
       handleClose();
     } catch (e) {
-      console.log('removeChannelErrorIs', e);
+      setDisabled(false);
     }
   };
   return (
     <>
       <Modal.Header closeButton onHide={handleClose}>
-        <Modal.Title>translateRemoveChannel</Modal.Title>
+        <Modal.Title>{t('modal.removeChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p className="lead">translateSure?</p>
+        <p className="lead">{t('modal.confirm')}</p>
         <div className="d-flex justify-content-end">
           <Button
             className="me-2"
             variant="secondary"
             type="button"
             onClick={handleClose}
+            disabled={disabled}
           >
-            translateCancel
+            {t('modal.cancel')}
           </Button>
           <Button
             variant="danger"
             type="button"
             onClick={handleRemove}
+            disabled={disabled}
           >
-            translateDelete
+            {t('modal.delete')}
           </Button>
         </div>
       </Modal.Body>
@@ -112,29 +114,30 @@ const RenameChannel = ({ id, handleClose }) => {
   const inputRef = useRef();
   const { channels } = useSelector((state) => state.channelsReducer);
   const { renameChannel } = useActions();
+  const { t } = useTranslation();
   const formik = useFormik({
     initialValues: {
       channel: '',
     },
     validationSchema: yup.object().shape({
-      channel: yup.string().trim().required().notOneOf(channels.map((channel) => channel.name)),
+      channel: yup.string().trim().required('required').notOneOf(channels.map((channel) => channel.name), 'unique'),
     }),
     onSubmit: async (value) => {
       try {
+        console.log('startRename: ', value);
         await renameChannel({ id, name: value.channel });
         handleClose();
       } catch (e) {
+        console.log('renameFailed: ', e);
         formik.setSubmitting(false);
-        console.log(e);
-        inputRef.currentfocus();
+        inputRef.current.focus();
       }
-      /// formik.setSubmitting(false);
     },
   });
   return (
     <>
       <Modal.Header closeButton onHide={handleClose}>
-        <Modal.Title>translateAddChannel</Modal.Title>
+        <Modal.Title>{t('modal.renameChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
@@ -149,13 +152,13 @@ const RenameChannel = ({ id, handleClose }) => {
               name="channel"
               id="channel"
             />
-            <Form.Label className="visually-hidden" htmlFor="channel">TranslateChannel</Form.Label>
+            <Form.Label className="visually-hidden" htmlFor="channel">{t('modal.cancel')}</Form.Label>
             <Form.Control.Feedback type="invalid">
-              TranslateError
+              {t(`modal.${formik.errors.channel}`)}
             </Form.Control.Feedback>
             <div className="d-flex justify-content-end">
-              <Button onClick={handleClose} className="me-2" type="button" variant="secondary">translateCancel</Button>
-              <Button disabled={formik.isSubmitting} type="submit" variant="primary">translateCancel</Button>
+              <Button onClick={handleClose} className="me-2" type="button" variant="secondary">{t('modal.cancel')}</Button>
+              <Button disabled={formik.isSubmitting} type="submit" variant="primary">{t('modal.submit')}</Button>
             </div>
           </FormGroup>
         </Form>

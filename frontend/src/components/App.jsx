@@ -2,18 +2,15 @@ import React, { useState } from 'react';
 import {
   BrowserRouter as Router, Routes, Route, useLocation, Navigate,
 } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
-import axios from 'axios';
-/// import { useDispatch } from 'react-redux';
 import { AuthContext } from '../contexts/index.js';
 import { useAuth } from '../hooks/index.js';
-import LoginPage from './LoginPage.jsx';
-import PageNotFound from './PageNotFound.jsx';
+
 import ChatPage from './ChatPage.jsx';
+import LoginPage from './LoginPage.jsx';
 import Navigation from './Navigation.jsx';
+import PageNotFound from './PageNotFound.jsx';
 import SignUpPage from './SignUpPage.jsx';
-import routes from '../routes';
 
 const initialAuthState = () => {
   // @ts-ignore
@@ -56,31 +53,20 @@ const RequireAuth = ({ children }) => {
   );
 };
 
-const getStore = () => axios.get(routes.usersPath(), { headers: getAuthHeader() })
-  .then((response) => console.log('response is: ', response))
-  .catch((e) => console.log('error is: ', e))
-  .finally(() => console.log('header is: ', getAuthHeader()));
-
-const App = () => {
-  const { messages } = useSelector((state) => state.messagesReducer);
-  const result = (
-    <AuthProvider>
-      <div className="d-flex flex-column h-100">
-        <Router>
-          <Navigation />
-          <button type="button" onClick={() => getStore()}>serverData</button>
-          <button type="button" onClick={() => console.log(messages)}>reduxStorage</button>
-          <Routes>
-            <Route path="/" element={(<RequireAuth><ChatPage /></RequireAuth>)} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignUpPage />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </Router>
-      </div>
-    </AuthProvider>
-  );
-  return result;
-};
+const App = () => (
+  <AuthProvider>
+    <div className="d-flex flex-column h-100">
+      <Router>
+        <Navigation />
+        <Routes>
+          <Route path="/" element={(<RequireAuth><ChatPage /></RequireAuth>)} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </Router>
+    </div>
+  </AuthProvider>
+);
 
 export default App;

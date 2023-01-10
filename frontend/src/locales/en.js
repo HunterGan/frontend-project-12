@@ -1,1 +1,66 @@
-export default {};
+export default {
+  translation: {
+    channels: {
+      channels: 'Channels',
+      manageChannel: 'Manage channels',
+      delete: 'Remove',
+      rename: 'Rename',
+    },
+    login: {
+      login: 'Login',
+      username: 'Username',
+      password: 'Password',
+      failed: 'Incorrect username or password',
+      noAccount: 'No account?',
+      signup: 'Register',
+    },
+    messages: {
+      count_zero: 'messages',
+      count_one: 'message',
+      count_many: 'messages',
+      newMessage: 'New message',
+      enterMessage: 'Tap your message',
+      submit: 'Submit',
+    },
+    modal: {
+      addChannel: 'Add channel',
+      cancel: 'Cancel',
+      channelAdded: 'Channel created',
+      channelName: 'Channel name',
+      channelRemoved: 'Channel removed',
+      channelRenamed: 'Channel renamed',
+      channelSize: 'From 3 to 20 symbols',
+      confirm: 'Sure?',
+      delete: 'Remove',
+      removeChannel: 'Remove channel',
+      renameChannel: 'Rename channel',
+      required: 'Required field',
+      submit: 'Submit',
+      unique: 'Must be unique',
+    },
+    navigation: {
+      logOut: 'Log out',
+      homeLink: 'Hexlet Chat',
+    },
+    page404: {
+      header: 'Page not found',
+      message: 'But you can go',
+      messageMainPage: 'to the main page',
+    },
+    signup: {
+      registration: 'Register',
+      userName: 'Username',
+      password: 'Password',
+      confirmPassword: 'Confirm password',
+      userExists: 'User already exists',
+      required: 'Required field',
+      userNameSize: 'From 3 to 20 symbols',
+      passwordSize: 'Not less than 6 symbols',
+      passwordMatch: 'Passwords must match',
+      submit: 'Register',
+    },
+    errors: {
+      loadError: 'Loading error',
+    },
+  },
+};

@@ -7,6 +7,7 @@ import {
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useRollbar } from '@rollbar/react';
 import routes from '../routes';
 import { useAuth } from '../hooks/index.js';
 
@@ -15,6 +16,7 @@ const SignUpPage = () => {
   const auth = useAuth();
   const inputRef = useRef();
   const navigate = useNavigate();
+  const rollbar = useRollbar();
   const [signUpFailed, setSignUpFailed] = useState(false);
   useEffect(() => {
     inputRef.current.focus();
@@ -38,14 +40,15 @@ const SignUpPage = () => {
         localStorage.setItem('userId', JSON.stringify(res.data));
         auth.logIn();
         navigate('/');
-      } catch (err) {
+      } catch (e) {
+        rollbar.error('SignUp error', e);
         formik.setSubmitting(false);
-        if (err.isAxiosError && err.response.status === 409) {
+        if (e.isAxiosError && e.response.status === 409) {
           setSignUpFailed(true);
           inputRef.current.select();
           return;
         }
-        throw err;
+        throw e;
       }
     },
   });

@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
+import { useRollbar } from '@rollbar/react';
 
 import ChannelsBox from './ChannelsBox.jsx';
 import MessagesBox from './MessagesBox.jsx';
@@ -23,6 +24,7 @@ const Chat = () => {
   const dispatch = useDispatch();
   const auth = useAuth();
   const { t } = useTranslation();
+  const rollbar = useRollbar();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -32,11 +34,12 @@ const Chat = () => {
         dispatch(channelsActions.addChannels({ channels, currentChannelId }));
         dispatch(messagesActions.addMessages({ messages }));
       } catch (e) {
+        rollbar.error('Error fetching initialData', e);
         toast.error(t('errors.loadError'));
       }
     };
     fetchData();
-  }, [dispatch, auth, t]);
+  }, [dispatch, auth, t, rollbar]);
 
   return (
     <>

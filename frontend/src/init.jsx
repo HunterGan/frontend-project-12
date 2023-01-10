@@ -4,6 +4,7 @@ import i18next from 'i18next';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import 'react-toastify/dist/ReactToastify.css';
 import leoProfanity from 'leo-profanity';
+import { Provider as Rollbar, ErrorBoundary } from '@rollbar/react';
 
 import store from './slices/index.js';
 import { actions as channelsActions } from './slices/channelsSlice.js';
@@ -39,6 +40,20 @@ export default async (socket) => {
     );
   };
 
+  const RollbarProvider = ({ children }) => {
+    const rollbarConfig = {
+      accessToken: 'b5ba6a7bcaa747d3b83d06cbfed2fc08',
+      environment: 'testenv',
+    };
+    return (
+      <Rollbar config={rollbarConfig}>
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
+      </Rollbar>
+    );
+  };
+
   const dict = leoProfanity.getDictionary('ru');
   leoProfanity.add(dict);
 
@@ -66,13 +81,16 @@ export default async (socket) => {
     }));
   });
   const vdom = (
-    <Provider store={store}>
-      <I18nextProvider i18n={i18nextInstance}>
-        <ActionsProvider>
-          <App />
-        </ActionsProvider>
-      </I18nextProvider>
-    </Provider>
+    <RollbarProvider>
+      <Provider store={store}>
+        <I18nextProvider i18n={i18nextInstance}>
+          <ActionsProvider>
+            <App />
+          </ActionsProvider>
+        </I18nextProvider>
+      </Provider>
+    </RollbarProvider>
+
   );
 
   return vdom;

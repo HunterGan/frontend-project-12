@@ -7,6 +7,7 @@ import {
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useRollbar } from '@rollbar/react';
 import routes from '../routes';
 import { useAuth } from '../hooks/index.js';
 
@@ -16,6 +17,7 @@ const LoginPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const rollbar = useRollbar();
   const [authFailed, setAuthFailed] = useState(false);
   useEffect(() => {
     inputRef.current.focus();
@@ -37,14 +39,15 @@ const LoginPage = () => {
         auth.logIn();
         const { from } = location.state || { from: { pathname: '/' } };
         navigate(from);
-      } catch (err) {
+      } catch (e) {
+        rollbar.error('Login page and auth error', e);
         formik.setSubmitting(false);
-        if (err.isAxiosError && err.response.status === 401) {
+        if (e.isAxiosError && e.response.status === 401) {
           setAuthFailed(true);
           inputRef.current.select();
           return;
         }
-        throw err;
+        throw e;
       }
     },
   });

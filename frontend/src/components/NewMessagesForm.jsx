@@ -4,6 +4,7 @@ import { Form, InputGroup, Button } from 'react-bootstrap';
 import { ArrowRightSquare } from 'react-bootstrap-icons';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useRollbar } from '@rollbar/react';
 import { useSelector } from 'react-redux';
 import { useActions, useAuth } from '../hooks/index.js';
 
@@ -13,6 +14,7 @@ const NewMessagesForm = ({ messages }) => {
   const { sendMessage } = useActions();
   const inputRef = useRef();
   const { user } = useAuth();
+  const rollbar = useRollbar();
   useEffect(() => {
     inputRef.current.focus();
   }, [currentChannelId, messages]);
@@ -34,7 +36,7 @@ const NewMessagesForm = ({ messages }) => {
         await sendMessage(newMessage);
         formik.resetForm();
       } catch (e) {
-        console.log(e);
+        rollbar.error('NewMessage error', e);
       }
       formik.setSubmitting(false);
       inputRef.current.focus();

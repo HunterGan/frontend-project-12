@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import {
   Modal, FormGroup, FormControl, Form, Button,
 } from 'react-bootstrap';
+import { useRollbar } from '@rollbar/react';
 import { actions } from '../slices/modalsSlice.js';
 import { actions as channelsActions } from '../slices/channelsSlice.js';
 import { useActions } from '../hooks/index.js';
@@ -17,6 +18,7 @@ const AddChannel = ({ handleClose }) => {
   const dispatch = useDispatch();
   const { channels } = useSelector((state) => state.channelsReducer);
   const { createChannel } = useActions();
+  const rollbar = useRollbar();
   const formik = useFormik({
     initialValues: {
       channel: '',
@@ -32,6 +34,7 @@ const AddChannel = ({ handleClose }) => {
         dispatch(channelsActions.setActiveChannel(res.data));
         handleClose();
       } catch (e) {
+        rollbar.error('Modal add channel error', e);
         formik.setSubmitting(false);
         inputRef.current.focus();
       }
@@ -74,6 +77,7 @@ const AddChannel = ({ handleClose }) => {
 const RemoveChannel = ({ handleClose, id }) => {
   const { removeChannel } = useActions();
   const { t } = useTranslation();
+  const rollbar = useRollbar();
   const [disabled, setDisabled] = useState(false);
   const handleRemove = async () => {
     try {
@@ -82,6 +86,7 @@ const RemoveChannel = ({ handleClose, id }) => {
       toast.success(t('modal.channelRemoved'));
       handleClose();
     } catch (e) {
+      rollbar.error('Modal remove channel error', e);
       setDisabled(false);
     }
   };
@@ -117,6 +122,7 @@ const RemoveChannel = ({ handleClose, id }) => {
 };
 const RenameChannel = ({ id, handleClose }) => {
   const inputRef = useRef();
+  const rollbar = useRollbar();
   const { channels } = useSelector((state) => state.channelsReducer);
   const currentChannel = channels.find((channel) => channel.id === id);
   const { renameChannel } = useActions();
@@ -135,6 +141,7 @@ const RenameChannel = ({ id, handleClose }) => {
         toast.success(t('modal.channelRenamed'));
         handleClose();
       } catch (e) {
+        rollbar.error('Modal rename channel error', e);
         formik.setSubmitting(false);
         inputRef.current.focus();
       }
@@ -159,7 +166,7 @@ const RenameChannel = ({ id, handleClose }) => {
               name="channel"
               id="channel"
             />
-            <Form.Label className="visually-hidden" htmlFor="channel">{t('modal.cancel')}</Form.Label>
+            <Form.Label className="visually-hidden" htmlFor="channel">{t('modal.channelName')}</Form.Label>
             <Form.Control.Feedback type="invalid">
               {t(`modal.${formik.errors.channel}`)}
             </Form.Control.Feedback>

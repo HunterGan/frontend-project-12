@@ -26,7 +26,10 @@ export default {
     modal: {
       addChannel: 'Добавить канал',
       cancel: 'Отменить',
+      channelAdded: 'Канал создан',
       channelName: 'Имя канала',
+      channelRemoved: 'Канал удалён',
+      channelRenamed: 'Канал переименован',
       channelSize: 'От 3 до 20 символов',
       confirm: 'Уверены?',
       delete: 'Удалить',
@@ -56,6 +59,9 @@ export default {
       passwordSize: 'Не менее 6 символов',
       passwordMatch: 'Пароли должны совпадать',
       submit: 'Зарегистрироваться',
+    },
+    errors: {
+      loadError: 'Ошибка соединения',
     },
   },
 };

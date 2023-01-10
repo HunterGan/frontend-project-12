@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {
-  Container, Row, Col, Card, Form, FloatingLabel, Button,
+  Container, Row, Col, Card, Form, Button,
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -60,7 +60,7 @@ const SignUpPage = () => {
               </div>
               <Form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={formik.handleSubmit}>
                 <h1 className="text-center mb-4">{t('signup.registration')}</h1>
-                <FloatingLabel className="mb-3" label={t('signup.userName')}>
+                <Form.Group className="form-floating mb-3">
                   <Form.Control
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -73,11 +73,12 @@ const SignUpPage = () => {
                     ref={inputRef}
                     required
                   />
+                  <Form.Label htmlFor="username">{t('signup.userName')}</Form.Label>
                   <Form.Control.Feedback type="invalid" placement="right" tooltip>
                     {formik.errors.username && t(`signup.${formik.errors.username}`)}
                   </Form.Control.Feedback>
-                </FloatingLabel>
-                <FloatingLabel className="mb-4" label={t('signup.password')}>
+                </Form.Group>
+                <Form.Group className="form-floating mb-3">
                   <Form.Control
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -91,11 +92,12 @@ const SignUpPage = () => {
                     isInvalid={(formik.errors.password && formik.touched.password) || signUpFailed}
                     required
                   />
+                  <Form.Label htmlFor="password">{t('signup.password')}</Form.Label>
                   <Form.Control.Feedback type="invalid" placement="right" tooltip>
                     {formik.errors.password && t(`signup.${formik.errors.password}`)}
                   </Form.Control.Feedback>
-                </FloatingLabel>
-                <FloatingLabel className="mb-4" label={t('signup.confirmPassword')}>
+                </Form.Group>
+                <Form.Group className="form-floating mb-3">
                   <Form.Control
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -109,10 +111,11 @@ const SignUpPage = () => {
                       || signUpFailed}
                     required
                   />
+                  <Form.Label htmlFor="confirmPassword">{t('signup.confirmPassword')}</Form.Label>
                   <Form.Control.Feedback type="invalid" placement="right" tooltip>
                     {signUpFailed ? t('signup.userExists') : t(`signup.${formik.errors.confirmPassword}`)}
                   </Form.Control.Feedback>
-                </FloatingLabel>
+                </Form.Group>
                 <Button variant="outline-primary" type="submit" className="w-100 mb-3">{t('signup.submit')}</Button>
               </Form>
             </Card.Body>

@@ -2,6 +2,8 @@
 
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
 
@@ -16,18 +18,25 @@ import { useAuth } from '../hooks/index.js';
 import routes from '../routes.js';
 
 const Chat = () => {
+  // @ts-ignore
   const { active } = useSelector((state) => state.modalsReducer);
   const dispatch = useDispatch();
   const auth = useAuth();
+  const { t } = useTranslation();
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.get(routes.usersPath(), { headers: auth.getAuthHeader() });
-      const { messages, channels, currentChannelId } = data;
-      dispatch(channelsActions.addChannels({ channels, currentChannelId }));
-      dispatch(messagesActions.addMessages({ messages }));
+      try {
+        // @ts-ignore
+        const { data } = await axios.get(routes.usersPath(), { headers: auth.getAuthHeader() });
+        const { messages, channels, currentChannelId } = data;
+        dispatch(channelsActions.addChannels({ channels, currentChannelId }));
+        dispatch(messagesActions.addMessages({ messages }));
+      } catch (e) {
+        toast.error(t('errors.loadError'));
+      }
     };
     fetchData();
-  }, []);
+  }, [dispatch, auth, t]);
 
   return (
     <>

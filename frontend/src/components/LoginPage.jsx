@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  Container, Row, Col, Card, Form, FloatingLabel, Button,
+  Container, Row, Col, Card, Form, Button,
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -59,7 +59,7 @@ const LoginPage = () => {
               </Col>
               <Form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={formik.handleSubmit}>
                 <h1 className="text-center mb-4">{t('login.login')}</h1>
-                <FloatingLabel className="mb-3" label={t('login.username')}>
+                <Form.Group className="form-floating mb-4">
                   <Form.Control
                     onChange={formik.handleChange}
                     value={formik.values.username}
@@ -70,8 +70,9 @@ const LoginPage = () => {
                     ref={inputRef}
                     required
                   />
-                </FloatingLabel>
-                <FloatingLabel className="mb-4" label={t('login.password')}>
+                  <Form.Label htmlFor="username">{t('login.username')}</Form.Label>
+                </Form.Group>
+                <Form.Group className="form-floating mb-4">
                   <Form.Control
                     type="password"
                     onChange={formik.handleChange}
@@ -83,8 +84,9 @@ const LoginPage = () => {
                     required
                     placeholder={t('login.password')}
                   />
+                  <Form.Label htmlFor="password">{t('login.password')}</Form.Label>
                   <Form.Control.Feedback type="invalid" tooltip>{t('login.failed')}</Form.Control.Feedback>
-                </FloatingLabel>
+                </Form.Group>
                 <Button variant="outline-primary" type="submit" className="w-100 mb-3">{t('login.login')}</Button>
               </Form>
             </Card.Body>

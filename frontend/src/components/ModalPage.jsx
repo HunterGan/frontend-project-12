@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
@@ -27,6 +28,7 @@ const AddChannel = ({ handleClose }) => {
     onSubmit: async (value) => {
       try {
         const res = await createChannel({ name: value.channel });
+        toast.success(t('modal.channelAdded'));
         dispatch(channelsActions.setActiveChannel(res.data));
         handleClose();
       } catch (e) {
@@ -77,6 +79,7 @@ const RemoveChannel = ({ handleClose, id }) => {
     try {
       setDisabled(true);
       await removeChannel({ id });
+      toast.success(t('modal.channelRemoved'));
       handleClose();
     } catch (e) {
       setDisabled(false);
@@ -129,6 +132,7 @@ const RenameChannel = ({ id, handleClose }) => {
     onSubmit: async (value) => {
       try {
         await renameChannel({ id, name: value.channel });
+        toast.success(t('modal.channelRenamed'));
         handleClose();
       } catch (e) {
         formik.setSubmitting(false);

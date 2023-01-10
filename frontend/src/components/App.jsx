@@ -3,6 +3,9 @@ import {
   BrowserRouter as Router, Routes, Route, useLocation, Navigate,
 } from 'react-router-dom';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { AuthContext } from '../contexts/index.js';
 import { useAuth } from '../hooks/index.js';
 
@@ -66,6 +69,19 @@ const App = () => (
         </Routes>
       </Router>
     </div>
+    <ToastContainer
+      position="top-right"
+      autoClose={5000}
+      limit={3}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="light"
+    />
   </AuthProvider>
 );
 

@@ -79,7 +79,7 @@ const SignUpPage = () => {
                     </Form.Control.Feedback>
                   )}
                 </FloatingLabel>
-                <FloatingLabel className="mb-4" label="{t('signup.password')}">
+                <FloatingLabel className="mb-4" label={t('signup.password')}>
                   <Form.Control
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}

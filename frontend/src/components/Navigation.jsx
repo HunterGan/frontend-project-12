@@ -19,7 +19,7 @@ const Navigation = () => {
   return (
     <Navbar expand="lg" bg="white" className="shadow-sm">
       <Container>
-        <Navbar.Brand as={Link} href="/">{t('navigation.homeLink')}</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/">{t('navigation.homeLink')}</Navbar.Brand>
         <AuthButton />
       </Container>
     </Navbar>

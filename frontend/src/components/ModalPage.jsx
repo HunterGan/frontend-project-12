@@ -21,7 +21,8 @@ const AddChannel = ({ handleClose }) => {
       channel: '',
     },
     validationSchema: yup.object().shape({
-      channel: yup.string().trim().required('required').notOneOf(channels.map((channel) => channel.name), 'unique'),
+      channel: yup.string().trim().required('required').min(3, 'channelSize')
+        .notOneOf(channels.map((channel) => channel.name), 'unique'),
     }),
     onSubmit: async (value) => {
       try {
@@ -46,6 +47,7 @@ const AddChannel = ({ handleClose }) => {
               required
               className="mb-2"
               ref={inputRef}
+              isInvalid={(formik.errors.channel && formik.touched.channel)}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.channel}
@@ -54,10 +56,10 @@ const AddChannel = ({ handleClose }) => {
             />
             <Form.Label className="visually-hidden" htmlFor="channel">{t('modal.channelName')}</Form.Label>
             <Form.Control.Feedback type="invalid">
-              {t(`modal.${formik.errors.name}`)}
+              {t(`modal.${formik.errors.channel}`)}
             </Form.Control.Feedback>
             <div className="d-flex justify-content-end">
-              <Button onClick={handleClose} className="me-2" type="button" variant="secondary">{t('modal.cancel')}</Button>
+              <Button disabled={formik.isSubmitting} onClick={handleClose} className="me-2" type="button" variant="secondary">{t('modal.cancel')}</Button>
               <Button disabled={formik.isSubmitting} type="submit" variant="primary">{t('modal.submit')}</Button>
             </div>
           </FormGroup>
@@ -113,22 +115,22 @@ const RemoveChannel = ({ handleClose, id }) => {
 const RenameChannel = ({ id, handleClose }) => {
   const inputRef = useRef();
   const { channels } = useSelector((state) => state.channelsReducer);
+  const currentChannel = channels.find((channel) => channel.id === id);
   const { renameChannel } = useActions();
   const { t } = useTranslation();
   const formik = useFormik({
     initialValues: {
-      channel: '',
+      channel: currentChannel.name,
     },
     validationSchema: yup.object().shape({
-      channel: yup.string().trim().required('required').notOneOf(channels.map((channel) => channel.name), 'unique'),
+      channel: yup.string().trim().required('required').min(3, 'channelSize')
+        .notOneOf(channels.map((channel) => channel.name), 'unique'),
     }),
     onSubmit: async (value) => {
       try {
-        console.log('startRename: ', value);
         await renameChannel({ id, name: value.channel });
         handleClose();
       } catch (e) {
-        console.log('renameFailed: ', e);
         formik.setSubmitting(false);
         inputRef.current.focus();
       }
@@ -146,6 +148,7 @@ const RenameChannel = ({ id, handleClose }) => {
               required
               className="mb-2"
               ref={inputRef}
+              isInvalid={(formik.errors.channel && formik.touched.channel)}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.channel}
@@ -157,7 +160,7 @@ const RenameChannel = ({ id, handleClose }) => {
               {t(`modal.${formik.errors.channel}`)}
             </Form.Control.Feedback>
             <div className="d-flex justify-content-end">
-              <Button onClick={handleClose} className="me-2" type="button" variant="secondary">{t('modal.cancel')}</Button>
+              <Button disabled={formik.isSubmitting} onClick={handleClose} className="me-2" type="button" variant="secondary">{t('modal.cancel')}</Button>
               <Button disabled={formik.isSubmitting} type="submit" variant="primary">{t('modal.submit')}</Button>
             </div>
           </FormGroup>

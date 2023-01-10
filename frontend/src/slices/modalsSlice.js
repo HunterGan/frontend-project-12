@@ -10,7 +10,6 @@ const modalsSlice = createSlice({
   initialState,
   reducers: {
     openModal(state, { payload }) {
-      console.log(payload);
       const { type, id } = payload;
       state.type = type;
       state.id = id;

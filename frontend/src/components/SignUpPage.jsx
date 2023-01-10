@@ -73,11 +73,9 @@ const SignUpPage = () => {
                     ref={inputRef}
                     required
                   />
-                  {formik.errors.username && (
-                    <Form.Control.Feedback type="invalid" placement="right" tooltip>
-                      {t(`signup.${formik.errors.username}`)}
-                    </Form.Control.Feedback>
-                  )}
+                  <Form.Control.Feedback type="invalid" placement="right" tooltip>
+                    {formik.errors.username && t(`signup.${formik.errors.username}`)}
+                  </Form.Control.Feedback>
                 </FloatingLabel>
                 <FloatingLabel className="mb-4" label={t('signup.password')}>
                   <Form.Control
@@ -93,11 +91,9 @@ const SignUpPage = () => {
                     isInvalid={(formik.errors.password && formik.touched.password) || signUpFailed}
                     required
                   />
-                  {formik.errors.password && (
-                    <Form.Control.Feedback type="invalid" placement="right" tooltip>
-                      {t(`signup.${formik.errors.password}`)}
-                    </Form.Control.Feedback>
-                  )}
+                  <Form.Control.Feedback type="invalid" placement="right" tooltip>
+                    {formik.errors.password && t(`signup.${formik.errors.password}`)}
+                  </Form.Control.Feedback>
                 </FloatingLabel>
                 <FloatingLabel className="mb-4" label={t('signup.confirmPassword')}>
                   <Form.Control

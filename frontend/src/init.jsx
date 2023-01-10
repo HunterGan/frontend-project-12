@@ -2,6 +2,8 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import i18next from 'i18next';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
+import 'react-toastify/dist/ReactToastify.css';
+import leoProfanity from 'leo-profanity';
 
 import store from './slices/index.js';
 import { actions as channelsActions } from './slices/channelsSlice.js';
@@ -36,6 +38,9 @@ export default async (socket) => {
       </ActionsContext.Provider>
     );
   };
+
+  const dict = leoProfanity.getDictionary('ru');
+  leoProfanity.add(dict);
 
   const i18nextInstance = i18next.createInstance();
   await i18nextInstance

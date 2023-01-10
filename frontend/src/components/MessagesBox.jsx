@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import leoProfanity from 'leo-profanity';
 import NewMessagesForm from './NewMessagesForm.jsx';
 
 const MessagesBoxHeader = ({ messages, currentChannel }) => {
@@ -17,13 +18,15 @@ const MessagesBoxHeader = ({ messages, currentChannel }) => {
   );
 };
 
-const Message = ({ body, userName }) => (
-  <div className="text-break mb-2">
-    <b>{userName}</b>
-    {`: ${body}`}
-  </div>
-);
-
+const Message = ({ body, userName }) => {
+  const filtered = leoProfanity.clean(body);
+  return (
+    <div className="text-break mb-2">
+      <b>{userName}</b>
+      {`: ${filtered}`}
+    </div>
+  );
+};
 const MessagesBox = () => {
   const { channels, currentChannelId } = useSelector((state) => state.channelsReducer);
   const currentChannel = channels.find((channel) => channel.id === currentChannelId);

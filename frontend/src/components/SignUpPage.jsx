@@ -28,7 +28,7 @@ const SignUpPage = () => {
       username: yup.string().trim().min(3, 'userNameSize').max(20, 'userNameSize')
         .required('required'),
       password: yup.string().min(6, 'passwordSize').required('required'),
-      confirmPassword: yup.string().min(6, 'passwordSize').required('required')
+      confirmPassword: yup.string().required('required')
         .oneOf([yup.ref('password')], 'passwordMatch'),
     }),
     onSubmit: async (values) => {

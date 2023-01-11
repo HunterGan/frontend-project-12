@@ -44,7 +44,7 @@ const Channel = ({ channel, isActive, handleActions }) => {
             <span className="me-1">#</span>
             {channel.name}
           </Button>
-          <Dropdown.Toggle split className="flex-grow-0" variant={isActive && 'secondary'}>
+          <Dropdown.Toggle split className="flex-grow-0" variant={variant}>
             <span className="visually-hidden">{t('channels.manageChannel')}</span>
           </Dropdown.Toggle>
           <Dropdown.Menu>

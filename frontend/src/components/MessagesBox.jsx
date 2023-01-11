@@ -17,7 +17,8 @@ const MessagesBoxHeader = ({ messages, currentChannel }) => {
     </div>
   );
 };
-
+/// Фильтр в этом месте для того, чтобы пользователь мог вкл/выкл цензуру
+/// Выбор настроек темы, цензуры, языка, управления учетной записью в разработке :)
 const Message = ({ body, userName }) => {
   const filtered = leoProfanity.clean(body);
   return (
@@ -49,11 +50,7 @@ const MessagesBox = () => {
       <MessagesBoxHeader messages={curChannelMessages} currentChannel={currentChannel} />
       <div id="messages-box" className="chat-messages overflow-auto px-5">
         {curChannelMessages.map((message) => (
-          <Message
-            key={message.id}
-            body={message.body}
-            userName={message.userName}
-          />
+          <Message key={message.id} body={message.body} userName={message.userName} />
         ))}
         <div ref={messagesEndRef} />
       </div>

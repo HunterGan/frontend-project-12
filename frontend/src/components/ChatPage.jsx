@@ -18,7 +18,7 @@ import { actions as messagesActions } from '../slices/messagesSlice.js';
 import { useAuth } from '../hooks/index.js';
 import routes from '../routes.js';
 
-const Chat = () => {
+const ChatPage = () => {
   // @ts-ignore
   const { active } = useSelector((state) => state.modalsReducer);
   const dispatch = useDispatch();
@@ -31,6 +31,7 @@ const Chat = () => {
         // @ts-ignore
         const { data } = await axios.get(routes.usersPath(), { headers: auth.getAuthHeader() });
         const { messages, channels, currentChannelId } = data;
+        /// Сделаю action setInitialState для каналов, эктра для сообщений
         dispatch(channelsActions.addChannels({ channels, currentChannelId }));
         dispatch(messagesActions.addMessages({ messages }));
       } catch (e) {
@@ -57,4 +58,4 @@ const Chat = () => {
     </>
   );
 };
-export default Chat;
+export default ChatPage;

@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { AuthContext } from '../contexts/index.js';
 import { useAuth } from '../hooks/index.js';
+import routes from '../routes.js';
 
 import ChatPage from './ChatPage.jsx';
 import LoginPage from './LoginPage.jsx';
@@ -62,10 +63,10 @@ const App = () => (
       <Router>
         <Navigation />
         <Routes>
-          <Route path="/" element={(<RequireAuth><ChatPage /></RequireAuth>)} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          <Route path="*" element={<PageNotFound />} />
+          <Route path={routes.chat} element={(<RequireAuth><ChatPage /></RequireAuth>)} />
+          <Route path={routes.login} element={<LoginPage />} />
+          <Route path={routes.signup} element={<SignUpPage />} />
+          <Route path={routes.pageNotFound} element={<PageNotFound />} />
         </Routes>
       </Router>
     </div>

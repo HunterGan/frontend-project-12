@@ -39,7 +39,7 @@ const SignUpPage = () => {
         const res = await axios.post(routes.signUpPath(), values);
         localStorage.setItem('userId', JSON.stringify(res.data));
         auth.logIn();
-        navigate('/');
+        navigate(routes.chat);
       } catch (e) {
         rollbar.error('SignUp error', e);
         formik.setSubmitting(false);
@@ -52,7 +52,8 @@ const SignUpPage = () => {
       }
     },
   });
-  const result = (
+  const isInvalid = (field) => (formik.errors[field] && formik.touched[field]) || signUpFailed;
+  return (
     <Container fluid className="h-100 my-4">
       <Row className="justify-content-center align-content-center h-100">
         <Col xxl={6} md={8} xs={12}>
@@ -72,7 +73,7 @@ const SignUpPage = () => {
                     name="username"
                     id="username"
                     autoComplete="username"
-                    isInvalid={(formik.errors.username && formik.touched.username) || signUpFailed}
+                    isInvalid={isInvalid('username')}
                     ref={inputRef}
                     required
                   />
@@ -92,7 +93,7 @@ const SignUpPage = () => {
                     id="password"
                     type="password"
                     autoComplete="new-password"
-                    isInvalid={(formik.errors.password && formik.touched.password) || signUpFailed}
+                    isInvalid={isInvalid('password')}
                     required
                   />
                   <Form.Label htmlFor="password">{t('signup.password')}</Form.Label>
@@ -110,8 +111,7 @@ const SignUpPage = () => {
                     id="confirmPassword"
                     type="password"
                     autoComplete="confirmPassword"
-                    isInvalid={(formik.errors.confirmPassword && formik.touched.confirmPassword)
-                      || signUpFailed}
+                    isInvalid={isInvalid('confirmPassword')}
                     required
                   />
                   <Form.Label htmlFor="confirmPassword">{t('signup.confirmPassword')}</Form.Label>
@@ -127,7 +127,6 @@ const SignUpPage = () => {
       </Row>
     </Container>
   );
-  return result;
 };
 
 export default SignUpPage;

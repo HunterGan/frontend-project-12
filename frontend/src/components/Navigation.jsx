@@ -23,7 +23,7 @@ const SettingsButton = () => {
     <Dropdown className="btn-block mx-2">
       <Dropdown.Toggle variant="success" id="dropdown-basic">
         <Gear size={20} />
-        Dropdown Button
+        Настройки
       </Dropdown.Toggle>
       <Dropdown.Menu>
         <Dropdown.Item href="#/action-1">tema</Dropdown.Item>

@@ -41,36 +41,31 @@ const AddChannel = ({ handleClose }) => {
     },
   });
   return (
-    <>
-      <Modal.Header closeButton onHide={handleClose}>
-        <Modal.Title>{t('modal.addChannel')}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={formik.handleSubmit}>
-          <FormGroup>
-            <FormControl
-              required
-              className="mb-2"
-              ref={inputRef}
-              isInvalid={(formik.errors.channel && formik.touched.channel)}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.channel}
-              name="channel"
-              id="channel"
-            />
-            <Form.Label className="visually-hidden" htmlFor="channel">{t('modal.channelName')}</Form.Label>
-            <Form.Control.Feedback type="invalid">
-              {t(`modal.${formik.errors.channel}`)}
-            </Form.Control.Feedback>
-            <div className="d-flex justify-content-end">
-              <Button disabled={formik.isSubmitting} onClick={handleClose} className="me-2" type="button" variant="secondary">{t('modal.cancel')}</Button>
-              <Button disabled={formik.isSubmitting} type="submit" variant="primary">{t('modal.submit')}</Button>
-            </div>
-          </FormGroup>
-        </Form>
-      </Modal.Body>
-    </>
+    <Modal.Body>
+      <Form onSubmit={formik.handleSubmit}>
+        <FormGroup>
+          <FormControl
+            required
+            className="mb-2"
+            ref={inputRef}
+            isInvalid={(formik.errors.channel && formik.touched.channel)}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.channel}
+            name="channel"
+            id="channel"
+          />
+          <Form.Label className="visually-hidden" htmlFor="channel">{t('modal.channelName')}</Form.Label>
+          <Form.Control.Feedback type="invalid">
+            {t(`modal.${formik.errors.channel}`)}
+          </Form.Control.Feedback>
+          <div className="d-flex justify-content-end">
+            <Button disabled={formik.isSubmitting} onClick={handleClose} className="me-2" type="button" variant="secondary">{t('modal.cancel')}</Button>
+            <Button disabled={formik.isSubmitting} type="submit" variant="primary">{t('modal.submit')}</Button>
+          </div>
+        </FormGroup>
+      </Form>
+    </Modal.Body>
   );
 };
 
@@ -91,33 +86,28 @@ const RemoveChannel = ({ handleClose, id }) => {
     }
   };
   return (
-    <>
-      <Modal.Header closeButton onHide={handleClose}>
-        <Modal.Title>{t('modal.removeChannel')}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <p className="lead">{t('modal.confirm')}</p>
-        <div className="d-flex justify-content-end">
-          <Button
-            className="me-2"
-            variant="secondary"
-            type="button"
-            onClick={handleClose}
-            disabled={disabled}
-          >
-            {t('modal.cancel')}
-          </Button>
-          <Button
-            variant="danger"
-            type="button"
-            onClick={handleRemove}
-            disabled={disabled}
-          >
-            {t('modal.delete')}
-          </Button>
-        </div>
-      </Modal.Body>
-    </>
+    <Modal.Body>
+      <p className="lead">{t('modal.confirm')}</p>
+      <div className="d-flex justify-content-end">
+        <Button
+          className="me-2"
+          variant="secondary"
+          type="button"
+          onClick={handleClose}
+          disabled={disabled}
+        >
+          {t('modal.cancel')}
+        </Button>
+        <Button
+          variant="danger"
+          type="button"
+          onClick={handleRemove}
+          disabled={disabled}
+        >
+          {t('modal.delete')}
+        </Button>
+      </div>
+    </Modal.Body>
   );
 };
 const RenameChannel = ({ id, handleClose }) => {
@@ -148,36 +138,31 @@ const RenameChannel = ({ id, handleClose }) => {
     },
   });
   return (
-    <>
-      <Modal.Header closeButton onHide={handleClose}>
-        <Modal.Title>{t('modal.renameChannel')}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={formik.handleSubmit}>
-          <FormGroup>
-            <FormControl
-              required
-              className="mb-2"
-              ref={inputRef}
-              isInvalid={(formik.errors.channel && formik.touched.channel)}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.channel}
-              name="channel"
-              id="channel"
-            />
-            <Form.Label className="visually-hidden" htmlFor="channel">{t('modal.channelName')}</Form.Label>
-            <Form.Control.Feedback type="invalid">
-              {t(`modal.${formik.errors.channel}`)}
-            </Form.Control.Feedback>
-            <div className="d-flex justify-content-end">
-              <Button disabled={formik.isSubmitting} onClick={handleClose} className="me-2" type="button" variant="secondary">{t('modal.cancel')}</Button>
-              <Button disabled={formik.isSubmitting} type="submit" variant="primary">{t('modal.submit')}</Button>
-            </div>
-          </FormGroup>
-        </Form>
-      </Modal.Body>
-    </>
+    <Modal.Body>
+      <Form onSubmit={formik.handleSubmit}>
+        <FormGroup>
+          <FormControl
+            required
+            className="mb-2"
+            ref={inputRef}
+            isInvalid={(formik.errors.channel && formik.touched.channel)}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.channel}
+            name="channel"
+            id="channel"
+          />
+          <Form.Label className="visually-hidden" htmlFor="channel">{t('modal.channelName')}</Form.Label>
+          <Form.Control.Feedback type="invalid">
+            {t(`modal.${formik.errors.channel}`)}
+          </Form.Control.Feedback>
+          <div className="d-flex justify-content-end">
+            <Button disabled={formik.isSubmitting} onClick={handleClose} className="me-2" type="button" variant="secondary">{t('modal.cancel')}</Button>
+            <Button disabled={formik.isSubmitting} type="submit" variant="primary">{t('modal.submit')}</Button>
+          </div>
+        </FormGroup>
+      </Form>
+    </Modal.Body>
   );
 };
 
@@ -189,12 +174,20 @@ const modals = {
 
 const ModalPage = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { type, id, active } = useSelector((state) => state.modalsReducer);
   const handleClose = () => dispatch(actions.closeModal());
-  const Component = modals[type];
+  const ModalBody = modals[type] ?? null;
   return (
     <Modal show={active}>
-      {Component && <Component handleClose={handleClose} id={id} />}
+      {ModalBody && (
+        <>
+          <Modal.Header closeButton onHide={handleClose}>
+            <Modal.Title>{t(`modal.${type}Channel`)}</Modal.Title>
+          </Modal.Header>
+          <ModalBody handleClose={handleClose} id={id} />
+        </>
+      )}
     </Modal>
   );
 };

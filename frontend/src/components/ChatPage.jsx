@@ -13,7 +13,6 @@ import MessagesBox from './MessagesBox.jsx';
 import ModalPage from './ModalPage.jsx';
 
 import { actions as channelsActions } from '../slices/channelsSlice.js';
-import { actions as messagesActions } from '../slices/messagesSlice.js';
 
 import { useAuth } from '../hooks/index.js';
 import routes from '../routes.js';
@@ -30,10 +29,7 @@ const ChatPage = () => {
       try {
         // @ts-ignore
         const { data } = await axios.get(routes.usersPath(), { headers: auth.getAuthHeader() });
-        const { messages, channels, currentChannelId } = data;
-        /// Сделаю action setInitialState для каналов, эктра для сообщений
-        dispatch(channelsActions.addChannels({ channels, currentChannelId }));
-        dispatch(messagesActions.addMessages({ messages }));
+        dispatch(channelsActions.setInitialState(data));
       } catch (e) {
         rollbar.error('Error fetching initialData', e);
         toast.error(t('errors.loadError'));

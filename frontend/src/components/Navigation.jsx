@@ -40,11 +40,16 @@ const SettingsButton = () => {
 
 const Navigation = () => {
   const { t } = useTranslation();
+  const auth = useAuth();
   const isSettingsMenuActive = false;
   return (
     <Navbar expand="lg" bg="white" className="shadow-sm">
       <Container>
         <Navbar.Brand as={Link} to="/">{t('navigation.homeLink')}</Navbar.Brand>
+        <div className="text-center">
+          <span>{t('login.loggedIn')}</span>
+          <a href="/" onClick={() => (console.log('go to settings'))}>{auth.user.username}</a>
+        </div>
         <div className="d-flex flex-row">
           {isSettingsMenuActive && <SettingsButton />}
           <AuthButton />

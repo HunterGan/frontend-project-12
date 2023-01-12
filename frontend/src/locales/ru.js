@@ -7,6 +7,7 @@ export default {
       rename: 'Переименовать',
     },
     login: {
+      loggedIn: 'Вы вошли как: ',
       login: 'Войти',
       username: 'Ваш ник',
       password: 'Пароль',

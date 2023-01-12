@@ -13,16 +13,16 @@ const messagesSlice = createSlice({
     addMessage(state, { payload }) {
       state.messages.push(payload);
     },
-    addMessages(state, { payload }) {
-      const { messages } = payload;
-      state.messages = messages;
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(channelsActions.removeChannel, (state, { payload }) => {
       const { id } = payload;
       state.messages = state.messages.filter((message) => message.channelId !== id);
-    });
+    })
+      .addCase(channelsActions.setInitialState, (state, { payload }) => {
+        const { messages } = payload;
+        state.messages = messages;
+      });
   },
 });
 

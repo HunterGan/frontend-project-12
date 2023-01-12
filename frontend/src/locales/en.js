@@ -8,6 +8,7 @@ export default {
     },
     login: {
       login: 'Login',
+      loggedIn: 'Logged in as: ',
       username: 'Username',
       password: 'Password',
       failed: 'Incorrect username or password',

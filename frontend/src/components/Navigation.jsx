@@ -10,8 +10,9 @@ import { useAuth } from '../hooks/index.js';
 const AuthButton = () => {
   const { t } = useTranslation();
   const auth = useAuth();
+  console.log(auth.user);
   return (
-    auth.loggedIn
+    auth.user
       ? <Button className="btn-block mx-2" onClick={auth.logOut}>{t('navigation.logOut')}</Button>
       : null
   );

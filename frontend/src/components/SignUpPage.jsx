@@ -37,8 +37,9 @@ const SignUpPage = () => {
       try {
         setSignUpFailed(false);
         const res = await axios.post(routes.signUpPath(), values);
-        localStorage.setItem('userId', JSON.stringify(res.data));
-        auth.logIn();
+        /// localStorage.setItem('user', JSON.stringify(res.data));
+        console.log('user: ', res.data);
+        auth.logIn(res.data);
         navigate(routes.chat);
       } catch (e) {
         rollbar.error('SignUp error', e);

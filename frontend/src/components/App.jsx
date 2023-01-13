@@ -18,30 +18,31 @@ import SignUpPage from './SignUpPage.jsx';
 
 const initialAuthState = () => {
   // @ts-ignore
-  const localStorageData = JSON.parse(localStorage.getItem('userId'));
-  return !!(localStorageData && localStorageData.token);
-};
-
-const getAuthHeader = () => {
-  const userId = JSON.parse(localStorage.getItem('userId'));
-  if (userId && userId.token) {
-    return { Authorization: `Bearer ${userId.token}` };
-  }
-  return {};
+  const localStorageData = JSON.parse(localStorage.getItem('user'));
+  return (localStorageData && localStorageData.token) ? localStorageData : null;
 };
 
 const AuthProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(initialAuthState());
-  const logIn = () => setLoggedIn(true);
-  const logOut = () => {
-    localStorage.removeItem('userId');
-    setLoggedIn(false);
+  const [user, setUser] = useState(initialAuthState());
+  const logIn = (u) => {
+    localStorage.setItem('user', JSON.stringify(u));
+    setUser(u);
   };
-  const user = JSON.parse(localStorage.getItem('userId'));
+  const logOut = () => {
+    localStorage.removeItem('user');
+    setUser(false);
+  };
+  const getAuthHeader = () => {
+    if (user && user.token) {
+      return { Authorization: `Bearer ${user.token}` };
+    }
+    return {};
+  };
+  /// const user = JSON.parse(localStorage.getItem('user'));
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     <AuthContext.Provider value={{
-      loggedIn, logIn, logOut, getAuthHeader, user,
+      logIn, logOut, getAuthHeader, user,
     }}
     >
       {children}
@@ -53,7 +54,7 @@ const RequireAuth = ({ children }) => {
   const auth = useAuth();
   const location = useLocation();
   return (
-    auth.loggedIn ? children : <Navigate to="/login" state={{ from: location }} />
+    auth.user ? children : <Navigate to="/login" state={{ from: location }} />
   );
 };
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Container, Row, Col, Card, Form, Button,
@@ -35,8 +35,8 @@ const LoginPage = () => {
       try {
         setAuthFailed(false);
         const res = await axios.post(routes.loginPath(), values);
-        localStorage.setItem('userId', JSON.stringify(res.data));
-        auth.logIn();
+        /// localStorage.setItem('user', JSON.stringify(res.data));
+        auth.logIn(res.data);
         const { from } = location.state || { from: { pathname: routes.chat } };
         navigate(from);
       } catch (e) {
@@ -96,7 +96,7 @@ const LoginPage = () => {
             <Card.Footer className="p-4">
               <div className="text-center">
                 <span>{t('login.noAccount')}</span>
-                <a href="/signup">{t('login.signup')}</a>
+                <Link to={routes.signup}>{t('login.signup')}</Link>
               </div>
             </Card.Footer>
           </Card>

@@ -15,43 +15,27 @@ import { ActionsContext } from './contexts/index.js';
 import App from './components/App.jsx';
 
 export default async (socket) => {
-  const ActionsProvider = ({ children }) => {
-    const acknowledge = (type, data) => new Promise((resolve, reject) => {
-      socket.timeout(3000).volatile.emit(type, data, (err, response) => {
-        if (err) {
-          reject(err);
-        } else if (response.status === 'ok') {
-          resolve(response);
-        }
+  const acknowledge = (type, data) => new Promise((resolve, reject) => {
+    socket.timeout(3000).volatile.emit(type, data, (err, response) => {
+      if (err) {
         reject(err);
-      });
+      } else if (response.status === 'ok') {
+        resolve(response);
+      }
+      reject(err);
     });
-    // eslint-disable-next-line react/jsx-no-constructed-context-values
-    const chatActions = {
-      sendMessage: (data) => acknowledge('newMessage', data),
-      createChannel: (data) => acknowledge('newChannel', data),
-      renameChannel: (data) => acknowledge('renameChannel', data),
-      removeChannel: (data) => acknowledge('removeChannel', data),
-    };
-    return (
-      <ActionsContext.Provider value={chatActions}>
-        {children}
-      </ActionsContext.Provider>
-    );
+  });
+  // eslint-disable-next-line react/jsx-no-constructed-context-values
+  const chatActions = {
+    sendMessage: (data) => acknowledge('newMessage', data),
+    createChannel: (data) => acknowledge('newChannel', data),
+    renameChannel: (data) => acknowledge('renameChannel', data),
+    removeChannel: (data) => acknowledge('removeChannel', data),
   };
 
-  const RollbarProvider = ({ children }) => {
-    const rollbarConfig = {
-      accessToken: 'b5ba6a7bcaa747d3b83d06cbfed2fc08',
-      environment: 'testenv',
-    };
-    return (
-      <Rollbar config={rollbarConfig}>
-        <ErrorBoundary>
-          {children}
-        </ErrorBoundary>
-      </Rollbar>
-    );
+  const rollbarConfig = {
+    accessToken: 'b5ba6a7bcaa747d3b83d06cbfed2fc08',
+    environment: 'testenv',
   };
 
   const dict = leoProfanity.getDictionary('ru');
@@ -81,16 +65,17 @@ export default async (socket) => {
     }));
   });
   const vdom = (
-    <RollbarProvider>
-      <Provider store={store}>
-        <I18nextProvider i18n={i18nextInstance}>
-          <ActionsProvider>
-            <App />
-          </ActionsProvider>
-        </I18nextProvider>
-      </Provider>
-    </RollbarProvider>
-
+    <Rollbar config={rollbarConfig}>
+      <ErrorBoundary>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nextInstance}>
+            <ActionsContext.Provider value={chatActions}>
+              <App />
+            </ActionsContext.Provider>
+          </I18nextProvider>
+        </Provider>
+      </ErrorBoundary>
+    </Rollbar>
   );
 
   return vdom;

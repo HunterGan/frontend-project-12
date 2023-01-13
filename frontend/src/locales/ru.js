@@ -62,6 +62,7 @@ export default {
       submit: 'Зарегистрироваться',
     },
     errors: {
+      unknownError: 'Неизвестная ошибка',
       loadError: 'Ошибка соединения',
     },
   },

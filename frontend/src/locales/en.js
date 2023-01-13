@@ -61,6 +61,7 @@ export default {
       submit: 'Register',
     },
     errors: {
+      unknownError: 'Unknown error',
       loadError: 'Loading error',
     },
   },

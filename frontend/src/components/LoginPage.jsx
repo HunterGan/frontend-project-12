@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import {
   Container, Row, Col, Card, Form, Button,
 } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useRollbar } from '@rollbar/react';
@@ -35,19 +36,22 @@ const LoginPage = () => {
       try {
         setAuthFailed(false);
         const res = await axios.post(routes.loginPath(), values);
-        /// localStorage.setItem('user', JSON.stringify(res.data));
         auth.logIn(res.data);
         const { from } = location.state || { from: { pathname: routes.chat } };
         navigate(from);
       } catch (e) {
         rollbar.error('Login page and auth error', e);
         formik.setSubmitting(false);
-        if (e.isAxiosError && e.response.status === 401) {
-          setAuthFailed(true);
-          inputRef.current.select();
+        if (!e.isAxiosError) {
+          toast.error(t('error.unknownError'));
           return;
         }
-        throw e;
+        if (e.response.status === 401) {
+          setAuthFailed(true);
+          inputRef.current.select();
+        } else {
+          toast.error(t('error.loadError'));
+        }
       }
     },
   });

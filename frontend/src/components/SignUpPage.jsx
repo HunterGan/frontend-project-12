@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Container, Row, Col, Card, Form, Button,
 } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useRollbar } from '@rollbar/react';
@@ -37,19 +38,23 @@ const SignUpPage = () => {
       try {
         setSignUpFailed(false);
         const res = await axios.post(routes.signUpPath(), values);
-        /// localStorage.setItem('user', JSON.stringify(res.data));
-        console.log('user: ', res.data);
         auth.logIn(res.data);
         navigate(routes.chat);
       } catch (e) {
         rollbar.error('SignUp error', e);
         formik.setSubmitting(false);
-        if (e.isAxiosError && e.response.status === 409) {
-          setSignUpFailed(true);
-          inputRef.current.select();
+        if (!e.isAxiosError) {
+          toast.error(t('error.unknownError'));
           return;
         }
-        throw e;
+        if (e.response.status === 409) {
+          setSignUpFailed(true);
+          inputRef.current.select();
+          /// toast.error(t('signup.userExists'));
+          /// navigate(routes.login);
+        } else {
+          toast.error(t('error.loadError'))
+        }
       }
     },
   });

@@ -53,7 +53,7 @@ const SignUpPage = () => {
           /// toast.error(t('signup.userExists'));
           /// navigate(routes.login);
         } else {
-          toast.error(t('error.loadError'))
+          toast.error(t('error.loadError'));
         }
       }
     },

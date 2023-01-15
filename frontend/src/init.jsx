@@ -34,8 +34,8 @@ export default async (socket) => {
   };
 
   const rollbarConfig = {
-    accessToken: 'b5ba6a7bcaa747d3b83d06cbfed2fc08',
-    environment: 'testenv',
+    accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN,
+    environment: 'production',
   };
 
   const dict = leoProfanity.getDictionary('ru');

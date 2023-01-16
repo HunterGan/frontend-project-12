@@ -94,7 +94,7 @@ const LoginPage = () => {
                   <Form.Label htmlFor="password">{t('login.password')}</Form.Label>
                   <Form.Control.Feedback type="invalid" tooltip>{t('login.failed')}</Form.Control.Feedback>
                 </Form.Group>
-                <Button variant="outline-primary" type="submit" className="w-100 mb-3">{t('login.login')}</Button>
+                <Button disabled={formik.isSubmitting} variant="outline-primary" type="submit" className="w-100 mb-3">{t('login.login')}</Button>
               </Form>
             </Card.Body>
             <Card.Footer className="p-4">

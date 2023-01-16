@@ -5,6 +5,7 @@ export default {
       manageChannel: 'Управление каналом',
       delete: 'Удалить',
       rename: 'Переименовать',
+      loading: 'Загрузка',
     },
     login: {
       loggedIn: 'Вы вошли как: ',

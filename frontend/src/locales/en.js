@@ -5,6 +5,7 @@ export default {
       manageChannel: 'Manage channels',
       delete: 'Remove',
       rename: 'Rename',
+      loading: 'loading',
     },
     login: {
       login: 'Login',

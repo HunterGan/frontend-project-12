@@ -125,7 +125,7 @@ const SignUpPage = () => {
                     {signUpFailed ? t('signup.userExists') : t(`signup.${formik.errors.confirmPassword}`)}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Button variant="outline-primary" type="submit" className="w-100 mb-3">{t('signup.submit')}</Button>
+                <Button disabled={formik.isSubmitting} variant="outline-primary" type="submit" className="w-100 mb-3">{t('signup.submit')}</Button>
               </Form>
             </Card.Body>
           </Card>

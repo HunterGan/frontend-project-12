@@ -1,5 +1,3 @@
-// @ts-check
-
 import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -29,16 +27,13 @@ const Message = ({ body, userName }) => {
   );
 };
 const MessagesBox = () => {
-  // @ts-ignore
   const { channels, currentChannelId } = useSelector((state) => state.channelsReducer);
   const currentChannel = channels.find((channel) => channel.id === currentChannelId);
-  // @ts-ignore
   const { messages } = useSelector((state) => state.messagesReducer);
   const curChannelMessages = messages.filter((m) => m.channelId === currentChannelId);
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
-      // @ts-ignore
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   };

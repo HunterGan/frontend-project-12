@@ -1,6 +1,8 @@
 import React from 'react';
 import { Image } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import routes from '../routes';
 
 const PageNotFound = () => {
   const { t } = useTranslation();
@@ -12,7 +14,7 @@ const PageNotFound = () => {
       </h1>
       <p className="text-muted">
         {t('page404.message')}
-        <a href="/">{t('page404.messageMainPage')}</a>
+        <Link to={routes.chat}>{t('page404.messageMainPage')}</Link>
       </p>
     </div>
   );

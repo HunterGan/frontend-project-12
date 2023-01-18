@@ -55,8 +55,9 @@ const NewMessagesForm = ({ messages }) => {
           value={formik.values.message}
           ref={inputRef}
           disabled={formik.isSubmitting}
+          className="border-0 p-0 ps-2"
         />
-        <Button type="submit" variant="group-vertical" disabled={isInvalid}>
+        <Button type="submit" variant="group-vertical" className="border-0" disabled={isInvalid}>
           <ArrowRightSquare size={20} />
           <span className="visually-hidden">{t('messages.submit')}</span>
         </Button>

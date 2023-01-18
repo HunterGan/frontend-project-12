@@ -6,6 +6,7 @@ import {
 import { Gear } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/index.js';
+import routes from '../routes.js';
 
 const AuthButton = () => {
   const { t } = useTranslation();
@@ -26,13 +27,13 @@ const SettingsButton = () => {
         Настройки
       </Dropdown.Toggle>
       <Dropdown.Menu>
-        <Dropdown.Item href="#/action-1">tema</Dropdown.Item>
+        <Dropdown.Item href="#/action-1">Choose theme</Dropdown.Item>
         <Dropdown.Divider />
-        <Dropdown.Item href="#/action-2">cenzura</Dropdown.Item>
+        <Dropdown.Item href="#/action-2">textCleaning</Dropdown.Item>
         <Dropdown.Divider />
-        <Dropdown.Item href="#/action-3">nastroiki accouna</Dropdown.Item>
+        <Dropdown.Item href="#/action-3">Account settings</Dropdown.Item>
         <Dropdown.Divider />
-        <Dropdown.Item href="#/action-3">exit</Dropdown.Item>
+        <Dropdown.Item href="#/action-3">LogOut</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );
@@ -45,7 +46,7 @@ const Navigation = () => {
   return (
     <Navbar expand="lg" bg="white" className="shadow-sm">
       <Container>
-        <Navbar.Brand as={Link} to="/">{t('navigation.homeLink')}</Navbar.Brand>
+        <Navbar.Brand as={Link} to={routes.chat}>{t('navigation.homeLink')}</Navbar.Brand>
         <div className="d-flex flex-row">
           {isSettingsMenuActive && <SettingsButton />}
           <AuthButton />

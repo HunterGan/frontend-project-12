@@ -9,6 +9,7 @@ import { Provider as Rollbar, ErrorBoundary } from '@rollbar/react';
 import store from './slices/index.js';
 import { actions as channelsActions } from './slices/channelsSlice.js';
 import { actions as messagesActions } from './slices/messagesSlice.js';
+import { actions as sessionActions } from './slices/sessionSlice.js';
 import resources from './locales/index.js';
 
 import { ActionsContext } from './contexts/index.js';
@@ -63,6 +64,12 @@ export default async (socket) => {
       channelId: payload.id,
       channelName: payload.name,
     }));
+  });
+  socket.on('connect', () => {
+    store.dispatch(sessionActions.startSession());
+  });
+  socket.on('disconnect', () => {
+    store.dispatch(sessionActions.closeSession());
   });
   const vdom = (
     <Rollbar config={rollbarConfig}>

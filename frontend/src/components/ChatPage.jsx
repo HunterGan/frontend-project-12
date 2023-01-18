@@ -1,9 +1,8 @@
-// @ts-check
-
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
@@ -30,31 +29,40 @@ const Loading = () => {
 };
 
 const ChatPage = () => {
-  // @ts-ignore
   const { active } = useSelector((state) => state.modalsReducer);
-  const [loading, setLoading] = useState(true);
+  const { isSessionActive } = useSelector((state) => state.sessionReducer);
+  const [isLoading, setLoading] = useState(isSessionActive);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const auth = useAuth();
   const { t } = useTranslation();
   const rollbar = useRollbar();
   useEffect(() => {
-    setLoading(true);
     const fetchData = async () => {
+      if (!isSessionActive) setLoading(true);
       try {
-        // @ts-ignore
         const { data } = await axios.get(routes.usersPath(), { headers: auth.getAuthHeader() });
         dispatch(channelsActions.setInitialState(data));
         setLoading(false);
       } catch (e) {
-        setLoading(false);
         rollbar.error('Error fetching initialData', e);
-        toast.error(t('errors.loadError'));
+        if (!e.isAxiosError) {
+          toast.error(t('errors.unknownError'));
+          return;
+        }
+
+        if (e.response?.status === 401) {
+          auth.logOut();
+          navigate(routes.login);
+        } else {
+          toast.error(t('errors.loadError'));
+        }
       }
     };
     fetchData();
-  }, [dispatch, auth, t, rollbar]);
+  }, [dispatch, auth, t, rollbar, navigate, isSessionActive]);
 
-  return loading
+  return isLoading
     ? (<Loading />)
     : (
       <>
